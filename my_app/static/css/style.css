@@ -1,0 +1,10 @@
+
+.messages {
+    color: red;
+}
+.message_success {
+    background-color: rgb(179, 255, 179);
+    color: rgb(0, 94, 0);
+    border: 2px solid rgb(140, 240, 97);
+    border-radius: 5px;
+}
