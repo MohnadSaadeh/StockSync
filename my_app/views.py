@@ -88,14 +88,66 @@ def logout(request):
     request.session.clear()
     return redirect('/')
 
-def display_employees(request):
-    return render (request, 'profile.html')
 
-def add_neww_employee(request):
-    pass
+def add_new_employee(request):
+    errors = models.Employee.objects.employee_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect('/employees')
+    else:
+        manager = request.session['manager_id']
+        emp_f_name = request.POST['f_name']
+        emp_l_name = request.POST['l_name']
+        emp_emeil = request.POST['email']
+        emp_DOB = request.POST['DOB']
+        emp_password = request.POST['password']
+        emp_conf_password = request.POST['c_password']
+        #hash-----Passwords-------
+        pw_hash = bcrypt.hashpw(emp_password.encode(), bcrypt.gensalt()).decode()
+        pw_hash_confirm = bcrypt.hashpw(emp_conf_password.encode(), bcrypt.gensalt()).decode()
+        #hash-----Passwords-------
+        models.add_employee(emp_f_name, emp_l_name, emp_emeil, emp_DOB, pw_hash, pw_hash_confirm , manager )
+        messages.success(request, "Successfully added an employee!" , extra_tags = 'add_employee')
+        return redirect('/employees')
+
+def display_employees(request):
+    # if the manad=egr not in the loged on
+    if 'manager_id' not in request.session:
+        return redirect('/index')
+    else:
+        context = {
+            'employees': models.get_all_employees()
+        }
+        return render (request, 'profile.html', context )
+
+
 
 def display_employee_dashboard(request):
-    return render(request, 'tables.html')
+    if 'employee_id' not in request.session:
+        return redirect('/index')
+    else:
+        context = {
+            'products': models.get_all_products(),
+            'employee': models.get_employee_by_id(request.session['employee_id'])
+        }
+        return render(request, 'tables.html' , context )
+
+
 
 def add_new_product(request):
-    pass
+    errors = models.Product.objects.product_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect('/employye_dashboard')
+    else:
+        employee = request.session['employee_id']
+        product_name = request.POST['product_name']
+        quantity = request.POST['quantity']
+        purchasing_price = request.POST['purchasing_price']
+        expiry_date = request.POST['expiry_date']
+        supplier = request.POST['supplier']
+        models.add_product(product_name, quantity, purchasing_price, expiry_date, supplier, employee)
+        messages.success(request, "Successfully added a product!", extra_tags = 'add_product')
+        return redirect('/employye_dashboard')

@@ -1,5 +1,6 @@
 from django.db import models
 import re
+import datetime
 #--------------------------------------------------------------------MANAGER-----------------------
 class ManagerManager(models.Manager):
     def manager_validator(self, postData):
@@ -49,18 +50,20 @@ class EmployeeManager(models.Manager):
     def employee_validator(self, postData):
         errors = {}
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-        if len(postData['admin_first_name']) < 2:
-            errors['admin_first_name'] = "First name should be at least 2 characters"
-        if len(postData['admin_last_name']) < 2:
-            errors['admin_last_name'] = "Last name should be at least 2 characters"
-        if not EMAIL_REGEX.match(postData['admin_email']):
-            errors['admin_email'] = "Invalid email address!"
-        if len(postData['admin_phone']) < 10:
-            errors['admin_phone'] = "Phone number should be at least 10 characters"
-        if len(postData['admin_password']) < 8:
-            errors['admin_password'] = "Password should be at least 8 characters"
-        if postData['admin_repete_password'] != postData['admin_password']:
-            errors['admin_repete_password'] = "Passwords do not match"
+        if len(postData['f_name']) < 2:
+            errors['f_name'] = "First name should be at least 2 characters"
+        if len(postData['l_name']) < 2:
+            errors['l_name'] = "Last name should be at least 2 characters"
+        if not EMAIL_REGEX.match(postData['email']):
+            errors['email'] = "Invalid email address!"
+        if postData['DOB'] == "":
+            errors['DOB'] = "Please enter a date"
+        if postData['DOB'] > str(datetime.date.today()):
+            errors['DOB'] = "Date should be in the past"
+        if len(postData['password']) < 8:
+            errors['password'] = "Password should be at least 8 characters"
+        if postData['c_password'] != postData['password']:
+            errors['c_password'] = "Passwords not match"
         return errors
     
     def login_employee_validator(self, postData):
@@ -69,7 +72,7 @@ class EmployeeManager(models.Manager):
         if not EMAIL_REGEX.match(postData['email']):
             errors['email'] = "Invalid email address!"
         if len(postData['password']) < 8:
-            errors['admin_password'] = "Password should be at least 8 characters"
+            errors['c_password'] = "Password should be at least 8 characters"
         return errors
 
 # EMP adds many Products
@@ -91,9 +94,34 @@ class Employee(models.Model):
     # purchasing_invoice
     # sale_orders
 
+def add_employee(f_name, l_name, email, DOB, password, confirm_password ,manager_id ):
+    manager = Manager.objects.get(id=manager_id)
+    Employee.objects.create(first_name=f_name, last_name=l_name, email=email, DOB=DOB, password=password, confirm_password=confirm_password , manager = manager )
+def get_all_employees():
+    return Employee.objects.all()
+
+def get_employee_by_id(id):
+    return Employee.objects.get(id=id)
 
 
 #--------------------------------------------------------------------PRODUCT-----------------------
+class ProductManager(models.Manager):
+    def product_validator(self, postData):
+        errors = {}
+        if len(postData['product_name']) < 2:
+            errors['product_name'] = "Product name should be at least 2 characters"
+        if postData['quantity'] == "":
+            errors['quantity'] = "Please enter a quantity"
+        if postData['purchasing_price'] == "":
+            errors['purchasing_price'] = "Please enter a purchasing price"
+        if postData['expiry_date'] == "":
+            errors['expiry_date'] = "Please enter a expiry date"
+        if postData['expiry_date'] < str(datetime.date.today()):
+            errors['expiry_date'] = "Expiry date should be in the future"
+        if postData['supplier'] == "":
+            errors['supplier'] = "Please enter a supplier"
+        return errors
+
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
     quantity = models.IntegerField()
@@ -104,8 +132,17 @@ class Product(models.Model):
     employee = models.ForeignKey(Employee , related_name="products", on_delete=models.CASCADE) # RESTRICT  deleted >>  dont delete the item or ( default="Default", on_delete=models.SET_DEFAULT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    objects = ProductManager()
     # purchasing_invoices
     # sale_orders
+
+def get_all_products():
+    return Product.objects.all()
+
+def add_product(product_name, quantity, purchasing_price, expiry_date, supplier, employee_id):
+    employee = Employee.objects.get(id=employee_id)
+    Product.objects.create(product_name=product_name, quantity=quantity, purchasing_price=purchasing_price, expiry_date=expiry_date, supplier=supplier, employee = employee)
+
 
 #--------------------------------------------------------------------PUECHASING-----------------------
 class Purchasing_invoice(models.Model):
