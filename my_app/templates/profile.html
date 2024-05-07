@@ -34,6 +34,8 @@
   <link href="{% static 'css/nucleo-svg.css' %}" rel="stylesheet" />
   <!-- CSS Files -->
   <nonscript><link id="pagestyle" href="{% static 'css/argon-dashboard.css' %}" rel="stylesheet" /></nonscript>
+  <!-- Team Style for errors from Back-End -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -296,7 +298,7 @@
                 <div class="d-flex align-items-center">
                   <p class="mb-0 ">Add New Employee</p>
                   
-                  <button class="btn btn-primary btn-sm ms-auto">Add</button>
+                  <button type="submit" class="btn btn-primary btn-sm ms-auto">Add</button>
                 </div>
               </div>
               <div class="card-body">
@@ -317,7 +319,7 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="example-text-input" class="form-control-label">Email</label>
-                      <input class="form-control" type="email" name="emeil">
+                      <input class="form-control" type="email" name="email">
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -339,6 +341,17 @@
                     </div>
                   </div>
                 </div>
+                {% if messages %}
+                <ul class="messages">    
+                  {% for message in messages %}    
+                      {% if message.extra_tags == 'add_employee' %}
+                      <li class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                      {% else %}
+                      <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> 
+                      {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
               </form>
               
               <!-- <hr class="horizontal dark">
@@ -386,18 +399,26 @@
           
           <div class="card card-profile">
             <h5 class="ps-2 pt-2">Employees List</h5>
+            
             <table class="table">
               <tr>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Joined us at</th>
               </tr>
+              {% for emp in employees %}
               <tr>
-                <td>test</td>
-                <td>test</td>
-                <td>test</td>
+                <td> <b>{{emp.first_name}} {{emp.last_name}}</b> </td>
+                <td>{{emp.email}}</td>
+                <td>{{emp.created_at}}</td>
+                
               </tr>
+              {% endfor %}
             </table>
+            
+              
+
+
             <!-- <img src="../assets/img/bg-profile.jpg" alt="Image placeholder" class="card-img-top">
             <div class="row justify-content-center">
               <div class="col-4 col-lg-4 order-lg-2">
