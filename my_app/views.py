@@ -11,7 +11,14 @@ def display_homepage(request):
 
 def index(request):
     if 'manager_id' in request.session:
-        return render(request , 'index.html')
+
+
+        context = {
+            
+            'sixmonthesproducts': models.get_six_monthes_products(),
+            }
+
+        return render(request , 'index.html' , context)
     else:
         return redirect('/')
     
@@ -117,6 +124,7 @@ def display_employees(request):
         return redirect('/index')
     else:
         context = {
+            
             'employees': models.get_all_employees()
         }
         return render (request, 'profile.html', context )
