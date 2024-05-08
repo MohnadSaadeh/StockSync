@@ -1,6 +1,8 @@
 from django.db import models
+from django.db.models import F, ExpressionWrapper, FloatField
+from datetime import datetime , timedelta
 import re
-import datetime
+# import datetime
 #--------------------------------------------------------------------MANAGER-----------------------
 class ManagerManager(models.Manager):
     def manager_validator(self, postData):
@@ -139,9 +141,33 @@ class Product(models.Model):
 def get_all_products():
     return Product.objects.all()
 
+def get_product_expired():
+    return Product.objects.filter(expiry_date__lt=datetime.date.today())
+    
+#--------------- not used -------------------
+def get_six_monthes():
+    today = datetime.today().date()
+    six_months_later = today + timedelta(days=6*30)  # Assuming 30 days per month
+    return Product.objects.filter(expiry_date__range=[today, six_months_later]).order_by('expiry_date')
+#--------------- not used -------------------
+
 def add_product(product_name, quantity, purchasing_price, expiry_date, supplier, employee_id):
     employee = Employee.objects.get(id=employee_id)
     Product.objects.create(product_name=product_name, quantity=quantity, purchasing_price=purchasing_price, expiry_date=expiry_date, supplier=supplier, employee = employee)
+# this function return the products and 
+# the total cost of each product 
+# (purchasing_price * quantity)
+# by adding a new field called total_cost
+# with the Product.objects.annotate
+def get_six_monthes_products():
+    today = datetime.today().date()
+    six_months_later = today + timedelta(days=6*30)
+    products_with_total_cost = Product.objects.annotate(
+        total_cost=F('purchasing_price') * F('quantity')
+        ).order_by('expiry_date').filter(expiry_date__range=[today, six_months_later])
+    return products_with_total_cost
+
+
 
 
 #--------------------------------------------------------------------PUECHASING-----------------------
