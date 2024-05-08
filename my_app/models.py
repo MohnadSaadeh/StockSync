@@ -167,7 +167,9 @@ def get_six_monthes_products():
         ).order_by('expiry_date').filter(expiry_date__range=[today, six_months_later])
     return products_with_total_cost
 
-
+def delete_clicked_product(request):
+    product=Product.objects.get(id=request.POST['product_id'])
+    return product.delete()
 
 
 #--------------------------------------------------------------------PUECHASING-----------------------
