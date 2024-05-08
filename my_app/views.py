@@ -141,8 +141,6 @@ def display_employee_dashboard(request):
         }
         return render(request, 'tables.html' , context )
 
-
-
 def add_new_product(request):
     errors = models.Product.objects.product_validator(request.POST)
     if len(errors) > 0:
@@ -169,6 +167,7 @@ def display_sales(request):
 def display_purchases(request):
     return render(request , 'purchase_invoices.html')
 
+# this function to delete product from stack table in employee dashboard
 def delete_product(request):
     models.delete_clicked_product(request)
     return redirect('/employye_dashboard')
