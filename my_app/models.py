@@ -143,7 +143,14 @@ def add_product(product_name, quantity, purchasing_price, expiry_date, supplier,
     employee = Employee.objects.get(id=employee_id)
     Product.objects.create(product_name=product_name, quantity=quantity, purchasing_price=purchasing_price, expiry_date=expiry_date, supplier=supplier, employee = employee)
 
-
+def delete_clicked_product(request):
+    product=Product.objects.get(id=request.POST['product_id'])
+    return product.delete()
+    
+# def add_to_sales(request):
+#     product_name=request.POST['product_name']
+#     quantity=request.POST['quantity']
+#     return Product.objects.filter(product_name=product_name, quantity=quantity)
 #--------------------------------------------------------------------PUECHASING-----------------------
 class Purchasing_invoice(models.Model):
     product_name = models.CharField(max_length=255) 
