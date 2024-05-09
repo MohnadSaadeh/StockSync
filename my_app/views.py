@@ -1,11 +1,19 @@
 from django.shortcuts import render ,redirect
 from . import models
+from datetime import datetime , timedelta
 from django.contrib import messages
+import datetime
 import bcrypt
 
 
 
 # to display the sign-in page
+def about_us(request):
+    return render(request, 'about_us.html')
+
+
+
+
 def display_homepage(request):
     return render(request, 'sign-in.html')
 
@@ -159,12 +167,14 @@ def add_new_product(request):
         models.add_product(product_name, quantity, purchasing_price, expiry_date, supplier, employee)
         messages.success(request, "Successfully added a product!", extra_tags = 'add_product')
         return redirect('/employye_dashboard')
-
+sale_order = {}
 def display_sales(request):
+    
     context = {
+            'sale_order': sale_order,
             'products': models.get_all_products(),
         }
-    return render(request , 'sale_orders.html', context)
+    return render(request , 'sale_orders.html', context )
 
 def display_purchases(request):
     return render(request , 'purchase_invoices.html')
@@ -172,3 +182,14 @@ def display_purchases(request):
 def delete_product(request):
     models.delete_clicked_product(request)
     return redirect('/employye_dashboard')
+
+def add_product_to_sale(request):
+    product_name = request.POST['product_name']
+    quantity = request.POST['quantity']
+    sale_order.update ( { 'product_name': product_name, 'quantity': quantity } )
+    for key ,value in sale_order.items():
+        print(key) 
+        print(value)
+        
+    print(sale_order)
+    return redirect('/sales')

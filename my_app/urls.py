@@ -15,11 +15,13 @@ urlpatterns = [
     path('purchases', views.display_purchases),
     path('delete_product', views.delete_product),
     
-    
+    path('add_order_to_sale', views.add_product_to_sale),
     
     path('signup', views.sign_up),
 
     path('signin', views.sign_in),
+
+    path('about_us', views.about_us),
 
 
 ]
