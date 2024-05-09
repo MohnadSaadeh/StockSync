@@ -80,6 +80,7 @@ def sign_in(request):
 
 
 
+
                 #     if bcrypt.checkpw(manager_password.encode(), manager_user.password.encode()): # here we chick the password 
                 #         request.session['manager_id'] = manager_user.id
                 #         return redirect('/index')
@@ -124,7 +125,6 @@ def display_employees(request):
         return redirect('/index')
     else:
         context = {
-            
             'employees': models.get_all_employees()
         }
         return render (request, 'profile.html', context )
@@ -159,3 +159,16 @@ def add_new_product(request):
         models.add_product(product_name, quantity, purchasing_price, expiry_date, supplier, employee)
         messages.success(request, "Successfully added a product!", extra_tags = 'add_product')
         return redirect('/employye_dashboard')
+
+def display_sales(request):
+    context = {
+            'products': models.get_all_products(),
+        }
+    return render(request , 'sale_orders.html', context)
+
+def display_purchases(request):
+    return render(request , 'purchase_invoices.html')
+
+def delete_product(request):
+    models.delete_clicked_product(request)
+    return redirect('/employye_dashboard')
