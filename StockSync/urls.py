@@ -22,7 +22,7 @@ from my_app.models import Manager
 
 class ManagerAdmin(admin.ModelAdmin):
     pass
-admin.site.register(Manager, ManagerAdmin)
+#admin.site.register(Manager, ManagerAdmin)
 
 # ****************
 
