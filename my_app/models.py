@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import F, ExpressionWrapper, FloatField
 from datetime import datetime , timedelta
+import datetime
 import re
 # import datetime
 #--------------------------------------------------------------------MANAGER-----------------------
@@ -143,7 +144,12 @@ def get_all_products():
 
 def get_product_expired():
     return Product.objects.filter(expiry_date__lt=datetime.date.today())
-    
+
+def delete_clicked_product(request):
+    product=Product.objects.get(id=request.POST['product_id'])
+    return product.delete()
+
+
 #--------------- not used -------------------
 def get_six_monthes():
     today = datetime.today().date()
@@ -172,7 +178,9 @@ def get_six_monthes_products():
 
 #--------------------------------------------------------------------PUECHASING-----------------------
 class Purchasing_invoice(models.Model):
-    product_name = models.CharField(max_length=255) 
+    # has to be deleted 
+    product_name = models.CharField(max_length=255)
+    # has to be deleted
     quantity = models.IntegerField()
 
     employee = models.ForeignKey(Employee , related_name="purchasing_invoices", on_delete=models.CASCADE) # RESTRICT  deleted >>  dont delete the item or ( default="Default", on_delete=models.SET_DEFAULT)
@@ -183,8 +191,10 @@ class Purchasing_invoice(models.Model):
 
 #--------------------------------------------------------------------SALE_ORDER-----------------------
 class Sale_order(models.Model):
+    # has to be deleted 
     product_name = models.CharField(max_length=255) 
-    quantity = models.IntegerField()
+    quantity = models.IntegerField() 
+    # has to be deleted 
 
     employee = models.ForeignKey(Employee , related_name="sale_orders", on_delete=models.CASCADE) # RESTRICT  deleted >>  dont delete the item or ( default="Default", on_delete=models.SET_DEFAULT)
     products = models.ManyToManyField(Product, related_name="sale_orders")
