@@ -3,6 +3,7 @@ from django.db.models import F, ExpressionWrapper, FloatField
 import datetime
 import re
 from datetime import datetime , timedelta
+from . import views
 
 
 #--------------------------------------------------------------------MANAGER-----------------------
@@ -208,4 +209,5 @@ def add_product_to_sale(product_name, product_id, quantity , employee_id ):
     sale_order = Sale_order.objects.create(product_name=product_name, quantity=quantity, employee = employee)
     product = Product.objects.get(id=product_id)
     product.quantity -= int(quantity)
+    
     return product.save()

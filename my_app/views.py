@@ -187,5 +187,5 @@ def submet_sale_order(request):
         quantity = key.get('quantity')
         employee_id = request.session['employee_id']
         models.add_product_to_sale(product_name, product_id, quantity , employee_id )
-        # models.add_product_to_sale(value)
+    sale_order.clear()
     return redirect('/sales')
