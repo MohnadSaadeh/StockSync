@@ -1,8 +1,6 @@
 from django.shortcuts import render ,redirect
 from . import models
-from datetime import datetime , timedelta
 from django.contrib import messages
-import datetime
 import bcrypt
 
 
@@ -19,13 +17,9 @@ def display_homepage(request):
 
 def index(request):
     if 'manager_id' in request.session:
-
-
-        context = {
-            
+        context = {           
             'sixmonthesproducts': models.get_six_monthes_products(),
             }
-
         return render(request , 'index.html' , context)
     else:
         return redirect('/')
@@ -84,10 +78,6 @@ def sign_in(request):
                     messages.error(request, "Email is incorrect")
     else:
         return redirect('/')
-
-
-
-
 
                 #     if bcrypt.checkpw(manager_password.encode(), manager_user.password.encode()): # here we chick the password 
                 #         request.session['manager_id'] = manager_user.id
