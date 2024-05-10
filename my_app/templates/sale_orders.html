@@ -267,50 +267,57 @@
             <div class="card-header pb-0">
                 
               <form action="/add_order_to_sale" method="post" id="add-form">
-                {% csrf_token %}
-                <div class="d-flex align-items-center">
-                  <p class="mb-0 ">New Sale Order</p>
-                  
-                  <button type="submit" class="btn btn-primary btn-sm ms-auto">Add product</button>
+                  {% csrf_token %}
+                  <div class="d-flex align-items-center">
+                    <p class="mb-0 ">New Sale Order</p>
+                    
+                    <button type="submit" class="btn btn-primary btn-sm ms-auto">Add product</button>
+                  </div>
                 </div>
-              </div>
-              <div class="card-body">
-                <p class="text-uppercase text-sm"></p>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="example-text-input" class="form-control-label">Product Name</label>
-                      <select  class="form-control" name="product_name" id="example-text-input">
-                        {% for product in products %}
-                        <option value="{{product.id}}">{{product.product_name}}</option>
-                        {% endfor %}
-                      </select>
-                      
+                <div class="card-body">
+                  <p class="text-uppercase text-sm"></p>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="example-text-input" class="form-control-label">Product Name</label>
+                        <select  class="form-control" name="product_name" id="example-text-input">
+                          <option selected>- Select Product -</option>
+                          {% for product in products %}
+                          <option>{{product.product_name}}</option>
+                          {% endfor %}
+                        </select>
+                        
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="example-text-input" class="form-control-label">Quantity</label>
-                      <input class="form-control" type="text" name="quantity" >
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="example-text-input" class="form-control-label">Quantity</label>
+                        <input class="form-control" type="text" name="quantity" >
+                      </div>
                     </div>
-                  </div>
+                </form>
+
+                <form action="/submet_sale_order" method="post">
+                  {% csrf_token %}
                   <p>Order Summery</p>
                   
                   <table class="table">
                     
                     <tr >
                         <th class="ps-3">Product</th>
+                        <th class="ps-3">id</th>
                         <th>Quantity</th>
                     </tr>
-                    {% for value in sale_order.values %}
+                    {% for order in sale_order %}
                     <tr>
-                        <td class="ps-3">  </td>
-                        <td>{{value}}</td>
+                        <td class="ps-3"> {{order.product_name}} </td>
+                        <td class="ps-3"> {{order.product_id}} </td>
+                        <td>{{order.quantity}}</td>
                     </tr>
                     {% endfor %}
                   </table>
                   
-                  <a href=""><button class="btn btn-primary btn-sm ms-auto mt-4">Submit order</button></a>
+                <button type="submit" class="btn btn-primary btn-sm ms-auto mt-4">Submit order</button>
                 </div>
                 
                 {% if messages %}
