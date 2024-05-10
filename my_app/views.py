@@ -157,7 +157,7 @@ def add_new_product(request):
         models.add_product(product_name, quantity, purchasing_price, expiry_date, supplier, employee)
         messages.success(request, "Successfully added a product!", extra_tags = 'add_product')
         return redirect('/employye_dashboard')
-sale_order = {}
+sale_order = []
 def display_sales(request):
     
     context = {
@@ -176,10 +176,16 @@ def delete_product(request):
 def add_product_to_sale(request):
     product_name = request.POST['product_name']
     quantity = request.POST['quantity']
-    sale_order.update ( { 'product_name': product_name, 'quantity': quantity } )
-    for key ,value in sale_order.items():
-        print(key) 
-        print(value)
-        
-    print(sale_order)
+    product_id = models.Product.objects.get(product_name=product_name).id
+    sale_order.append ( {'product_name': product_name , 'product_id': product_id , 'quantity': quantity } )
+    return redirect('/sales')
+    
+def submet_sale_order(request):
+    for key in sale_order :
+        product_name = key.get('product_name')
+        product_id = key.get('product_id')
+        quantity = key.get('quantity')
+        employee_id = request.session['employee_id']
+        models.add_product_to_sale(product_name, product_id, quantity , employee_id )
+    sale_order.clear()
     return redirect('/sales')

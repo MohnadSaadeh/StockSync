@@ -3,6 +3,7 @@ from django.db.models import F, ExpressionWrapper, FloatField
 import datetime
 import re
 from datetime import datetime , timedelta
+from . import views
 
 
 #--------------------------------------------------------------------MANAGER-----------------------
@@ -194,11 +195,19 @@ class Purchasing_invoice(models.Model):
 class Sale_order(models.Model):
     # has to be deleted 
     product_name = models.CharField(max_length=255) 
-    quantity = models.IntegerField() 
     # has to be deleted 
-
+    quantity = models.IntegerField() 
     employee = models.ForeignKey(Employee , related_name="sale_orders", on_delete=models.CASCADE) # RESTRICT  deleted >>  dont delete the item or ( default="Default", on_delete=models.SET_DEFAULT)
     products = models.ManyToManyField(Product, related_name="sale_orders")
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # products
+
+def add_product_to_sale(product_name, product_id, quantity , employee_id ):
+    employee = Employee.objects.get(id=employee_id)
+    sale_order = Sale_order.objects.create(product_name=product_name, quantity=quantity, employee = employee)
+    product = Product.objects.get(id=product_id)
+    product.quantity -= int(quantity)
+    
+    return product.save()
