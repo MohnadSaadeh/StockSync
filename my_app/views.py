@@ -2,6 +2,7 @@ from django.shortcuts import render ,redirect
 from . import models
 from django.contrib import messages
 import bcrypt
+from datetime import datetime , timedelta
 
 
 
@@ -189,3 +190,12 @@ def submet_sale_order(request):
         models.add_product_to_sale(product_name, product_id, quantity , employee_id )
     sale_order.clear()
     return redirect('/sales')
+
+def display_employee_reports(request):
+    context = {
+        'products': models.get_all_products(),
+        'today': datetime.today().date(),
+        'expiry_range': datetime.today().date() + timedelta(days=6*30),
+        'employee': models.get_employee_by_id(request.session['employee_id'])
+    }
+    return render (request, 'employee_reports.html', context)
