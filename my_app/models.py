@@ -121,7 +121,7 @@ class ProductManager(models.Manager):
             errors['purchasing_price'] = "Please enter a purchasing price"
         if postData['expiry_date'] == "":
             errors['expiry_date'] = "Please enter a expiry date"
-        if postData['expiry_date'] < str(datetime.date.today()):
+        if postData['expiry_date'] < str(datetime.today().date()):
             errors['expiry_date'] = "Expiry date should be in the future"
         if postData['supplier'] == "":
             errors['supplier'] = "Please enter a supplier"
