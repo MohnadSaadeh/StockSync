@@ -159,6 +159,7 @@ def add_new_product(request):
         messages.success(request, "Successfully added a product!", extra_tags = 'add_product')
         return redirect('/employye_dashboard')
 sale_order = []
+
 def display_sales(request):
     
     context = {
@@ -168,12 +169,17 @@ def display_sales(request):
     return render(request , 'sale_orders.html', context )
 
 def display_purchases(request):
-    return render(request , 'purchase_invoices.html')
+    context = {
+            'purchases_order': purchases_order,
+            'products': models.get_all_products(),
+            'invoices' : models.get_all_invoices()
+        }
+    return render(request , 'purchase_invoices.html' ,context)
 
 def delete_product(request):
     models.delete_clicked_product(request)
     return redirect('/employye_dashboard')
-
+#____________________________________SALE___________________________________
 def add_product_to_sale(request):
     product_name = request.POST['product_name']
     quantity = request.POST['quantity']
@@ -188,8 +194,34 @@ def submet_sale_order(request):
         quantity = key.get('quantity')
         employee_id = request.session['employee_id']
         models.add_product_to_sale(product_name, product_id, quantity , employee_id )
+        
+    models.sale_order_products(product_id)
     sale_order.clear()
     return redirect('/sales')
+#____________________________________SALE___________________________________
+
+purchases_order = []
+#____________________________________PURCHASE___________________________________
+def add_product_to_purchase(request):
+    product_name = request.POST['product_name']
+    quantity = request.POST['quantity']
+    product_id = models.Product.objects.get(product_name=product_name).id
+    purchases_order.append ( {'product_name': product_name , 'product_id': product_id , 'quantity': quantity } )
+    return redirect('/purchases')
+    
+def submet_purchase_order(request):
+    for key in purchases_order :
+        product_name = key.get('product_name')
+        product_id = key.get('product_id')
+        quantity = key.get('quantity')
+        employee_id = request.session['employee_id']
+        models.add_product_to_purchase(product_name, product_id, quantity , employee_id )
+        models.purchase_order_products(product_id)
+    purchases_order.clear()
+    return redirect('/purchases')
+#____________________________________PURCHASE___________________________________
+
+
 
 def display_employee_reports(request):
     context = {

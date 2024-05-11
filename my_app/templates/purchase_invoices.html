@@ -265,7 +265,7 @@
         <div class="col-8">
           <div class="card mb-4">
             <div class="card-header pb-0">
-              <form action="/add_sales_order" method="post" id="add-form">
+              <form action="/add_order_to_purchase" method="post" id="add-form">
                 {% csrf_token %}
                 <div class="d-flex align-items-center">
                   <p class="mb-0 ">New Purchase Invoice</p>
@@ -279,8 +279,11 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="example-text-input" class="form-control-label">Product Name</label>
-                      <select  class="form-control" name="product_list" id="example-text-input">
-                        <option value="{{product.id}}">{{product.product_name}}</option>
+                      <select  class="form-control" name="product_name" id="example-text-input">
+                        <option selected>- Select Product -</option>
+                        {% for product in products %}
+                        <option>{{product.product_name}}</option>
+                        {% endfor %}
                       </select>
                       
                     </div>
@@ -295,37 +298,48 @@
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Supplier</label>
                     <select  class="form-control" name="product_list" id="example-text-input">
-                      <option value="{{product.id}}">{{product.supplier}}</option>
+                      <option >AL-QUDS</option>
+                      <option >AL-ETIHAD</option>
                     </select>
                   </div>
                   </div>
+              </form>
+
+              <form action="/submet_purchase_order" method="post">
+                  {% csrf_token %}
                   <p>Order Summery</p>
                   <table class="table">
                     <tr >
                         <th class="ps-3">Product</th>
+                        <th class="ps-3">id</th>
                         <th>Quantity</th>
                         <th>Supplier</th>
                     </tr>
+                    {% for order in purchases_order %}
                     <tr>
-                        <td class="ps-3">test</td>
-                        <td>test</td>
-                        <td>test</td>
+                      <td class="ps-3"> {{order.product_name}} </td>
+                      <td class="ps-3"> {{order.product_id}} </td>
+                      <td>{{order.quantity}}</td>
+                      <td>Supplier</td>
                     </tr>
-                  </table>
-                  <a href=""><button class="btn btn-primary btn-sm ms-auto mt-4">Submit order</button></a>
-                </div>
-                {% if messages %}
-                <ul class="messages">    
-                  {% for message in messages %}    
-                      {% if message.extra_tags == 'add_product' %}
-                      
-                      <li class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
-                      {% else %}
-                      <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> 
-                      {% endif %}
                     {% endfor %}
-                </ul>
-                {% endif %}
+                  </table>
+
+
+                  <button class="btn btn-primary btn-sm ms-auto mt-4">Submit order</button>
+                </div>
+                  {% if messages %}
+                  <ul class="messages">    
+                    {% for message in messages %}    
+                        {% if message.extra_tags == 'add_product' %}
+                        
+                        <li class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                        {% else %}
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> 
+                        {% endif %}
+                      {% endfor %}
+                  </ul>
+                  {% endif %}
               </form>
             
           </div>
