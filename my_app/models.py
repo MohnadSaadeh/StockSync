@@ -173,7 +173,7 @@ def get_six_monthes_products():
     six_months_later = today + timedelta(days=6*30)
     products_with_total_cost = Product.objects.annotate(
         total_cost=F('purchasing_price') * F('quantity')
-        ).order_by('expiry_date').filter(expiry_date__range=[today, six_months_later])
+        output_field=DecimalField() ).order_by('expiry_date').filter(expiry_date__range=[today, six_months_later])
     return products_with_total_cost
 
 
