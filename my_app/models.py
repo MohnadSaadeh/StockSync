@@ -211,3 +211,9 @@ def add_product_to_sale(product_name, product_id, quantity , employee_id ):
     product.quantity -= int(quantity)
     
     return product.save()
+
+def get_all_sales_orders():
+    return Sale_order.objects.all()
+
+def get_sale_order(id):
+    return Sale_order.objects.get(id=id)

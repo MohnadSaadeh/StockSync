@@ -19,6 +19,7 @@ urlpatterns = [
     
     path('submet_sale_order', views.submet_sale_order),
     path('employee_reports', views.display_employee_reports),
+    path('view_sale_order/<int:id>', views.view_sale_order),
     
     path('signup', views.sign_up),
 

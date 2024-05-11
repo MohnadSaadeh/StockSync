@@ -164,11 +164,17 @@ def display_sales(request):
     context = {
             'sale_order': sale_order,
             'products': models.get_all_products(),
+            'orders' : models.get_all_sales_orders(),
+            'employee': models.get_employee_by_id(request.session['employee_id'])
         }
     return render(request , 'sale_orders.html', context )
 
 def display_purchases(request):
-    return render(request , 'purchase_invoices.html')
+    context = {
+        'products': models.get_all_products(),
+        'employee': models.get_employee_by_id(request.session['employee_id'])
+    }
+    return render(request , 'purchase_invoices.html', context)
 
 def delete_product(request):
     models.delete_clicked_product(request)
@@ -199,3 +205,10 @@ def display_employee_reports(request):
         'employee': models.get_employee_by_id(request.session['employee_id'])
     }
     return render (request, 'employee_reports.html', context)
+
+def view_sale_order(request, id):
+    context={
+        'order': models.get_sale_order(id),
+        
+    }
+    return render(request, 'view_sale_order.html',context)

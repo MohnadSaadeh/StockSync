@@ -58,6 +58,7 @@
         <li class="nav-item">
           <!-- desplaying the name of EMOLOYEE -->
           <a class="nav-link " href="/employye_dashboard">
+            
             <span class="nav-link-text ms-1"> <b class="message_success" >{{employee.first_name}} {{employee.first_name}}</b> </span>
           </a>
           <!-- desplaying the name of EMOLOYEE -->
@@ -178,14 +179,14 @@
               </a>
             </li>
             <li class="nav-item px-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-white p-0">
+              <!-- <a href="javascript:;" class="nav-link text-white p-0">
                 <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
-              </a>
+              </a> -->
             </li>
             <li class="nav-item dropdown pe-2 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <!-- <a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-bell cursor-pointer"></i>
-              </a>
+              </a> -->
               <!-- <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
                 <li class="mb-2">
                   <a class="dropdown-item border-radius-md" href="javascript:;">
@@ -301,10 +302,16 @@
                     </div>
                   </div>
                   <div class="col-md-6">
-                    <div class="form-group">
+                    <select  class="form-control" name="product_name" id="example-text-input">
+                      <option selected>- Select Supplier -</option>
+                      {% for product in products %}
+                      <option>{{product.supplier}}</option>
+                      {% endfor %}
+                    </select>
+                    <!-- <div class="form-group">
                       <label for="example-text-input" class="form-control-label">Supplier</label>
                       <input class="form-control" type="text" name="supplier">
-                    </div>
+                    </div> -->
                   </div>
                   
                 </div>
@@ -577,8 +584,53 @@
                             <input type="hidden" value="{{product.id}}" name="product_id">
                             <button class="btn btn-link text-danger text-gradient px-3 mb-0"><i class="far fa-trash-alt me-2"></i>Delete</button>
                           </form>
+                          <a class="btn btn-link text-dark px-3 mb-0 " id="show-edit" href=""><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
                           <!-- <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="/delete_product"><i class="far fa-trash-alt me-2"></i>Delete</a> -->
-                          <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                          <!-- <div class="center">
+                            <a class="btn btn-link text-dark px-3 mb-0 " id="show-edit" href=""><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                            <div class="popup" style="position: absolute; top: -150%; left: 50%; opacity: 0; transform: translate(-50%, -50%) scale(1.25); width: 380px; padding: 20px 30px; background-color: #fff; transition: top 0ms ease-in-out 200ms;">
+
+                          </div>
+                          <div class="popup" style="position: absolute; top: -150%; left: 50%; opacity: 0; transform: translate(-50%, -50%) scale(1.25); width: 380px; padding: 20px 30px; background-color: #fff; transition: top 0ms ease-in-out 200ms;">
+                            <div class="close-btn">&times;</div>
+                            <div class="form">
+                              <h2>Edit product</h2>
+                              <div class="form-element">
+                                <label for="product_name">Product name</label>
+                                <input type="text" id="product_name" name="product_name">
+                              </div>
+                              <div class="form-element">
+                                <label for="quantity">Quantity</label>
+                                <input type="text" id="quantity" name="quantity">
+                              </div>
+                              <div class="form-element">
+                                <label for="purchasing_price">Purchasing Price</label>
+                                <input type="text" id="purchasing_price" name="purchasing_price">
+                              </div>
+                              <div class="form-element">
+                                <label for="expiry_date">Expiry Date</label>
+                                <input type="date" id="expiry_date" name="expiry_date">
+                              </div>
+                              <div class="form-element">
+                                <label for="supplier">Supplier</label>
+                                <input type="text" id="supplier" name="supplier">
+                              </div>
+                              <div class="form-element">
+                                <button>Update</button>
+                              </div>
+
+
+                            </div>
+                          </div>
+                          <script>
+                            document.querySelector("#show-edit").addEventListener("click", function(){
+                              document.querySelector(".popup").classList.add("active");
+                            });
+                            document.querySelector(".popup .close-btn").addEventListener("click", function(){
+                              document.querySelector(".popup").classList.remove("active");
+                            });
+                          </script> -->
+                    
                         </div>
                       </td>
                     </tr>
