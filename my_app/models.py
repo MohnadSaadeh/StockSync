@@ -1,9 +1,10 @@
 from django.db import models
-from django.db.models import F, ExpressionWrapper, FloatField
+from django.db.models import F, ExpressionWrapper, FloatField ,DecimalField
 import datetime
 import re
 from datetime import datetime , timedelta
 from . import views
+
 
 
 #--------------------------------------------------------------------MANAGER-----------------------
@@ -190,6 +191,8 @@ class Purchasing_invoice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # products
+def get_all_invoices():
+    return Purchasing_invoice.objects.all()
 
 #--------------------------------------------------------------------SALE_ORDER-----------------------
 class Sale_order(models.Model):
@@ -204,10 +207,30 @@ class Sale_order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     # products
 
+# this is to sale a product
 def add_product_to_sale(product_name, product_id, quantity , employee_id ):
     employee = Employee.objects.get(id=employee_id)
     sale_order = Sale_order.objects.create(product_name=product_name, quantity=quantity, employee = employee)
     product = Product.objects.get(id=product_id)
     product.quantity -= int(quantity)
-    
     return product.save()
+
+# this is to purchase a product
+def add_product_to_purchase(product_name, product_id, quantity, employee_id):
+    employee = Employee.objects.get(id=employee_id)
+    purchase_invoice = Purchasing_invoice.objects.create(product_name=product_name, quantity=quantity, employee = employee)
+    product = Product.objects.get(id=product_id)
+    product.quantity += int(quantity)
+    return product.save()
+
+def sale_order_products(product_id):
+    product_id = product_id
+    sale_order = Sale_order.objects.last()
+    product = Product.objects.get(id=product_id)
+    return sale_order.products.add(product)
+
+def purchase_order_products(product_id):
+    product_id = product_id
+    purchase_invoice = Purchasing_invoice.objects.last()
+    product = Product.objects.get(id=product_id)
+    return purchase_invoice.products.add(product)
