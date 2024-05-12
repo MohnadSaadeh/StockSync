@@ -173,7 +173,7 @@ def get_six_monthes_products():
     six_months_later = today + timedelta(days=6*30)
     products_with_total_cost = Product.objects.annotate(
         total_cost=F('purchasing_price') * F('quantity')
-        output_field=DecimalField() ).order_by('expiry_date').filter(expiry_date__range=[today, six_months_later])
+        ).order_by('expiry_date').filter(expiry_date__range=[today, six_months_later])
     return products_with_total_cost
 
 
@@ -181,10 +181,9 @@ def get_six_monthes_products():
 
 #--------------------------------------------------------------------PUECHASING-----------------------
 class Purchasing_invoice(models.Model):
-    # has to be deleted 
-    product_name = models.CharField(max_length=255)
-    # has to be deleted
-    quantity = models.IntegerField()
+
+    # product_name = models.CharField(max_length=255)
+    # quantity = models.IntegerField()
 
     employee = models.ForeignKey(Employee , related_name="purchasing_invoices", on_delete=models.CASCADE) # RESTRICT  deleted >>  dont delete the item or ( default="Default", on_delete=models.SET_DEFAULT)
     products = models.ManyToManyField(Product, related_name="purchasing_invoices")
@@ -196,10 +195,10 @@ def get_all_invoices():
 
 #--------------------------------------------------------------------SALE_ORDER-----------------------
 class Sale_order(models.Model):
-    # has to be deleted 
-    product_name = models.CharField(max_length=255) 
-    # has to be deleted 
-    quantity = models.IntegerField() 
+
+    # product_name = models.CharField(max_length=255) 
+    # quantity = models.IntegerField()
+
     employee = models.ForeignKey(Employee , related_name="sale_orders", on_delete=models.CASCADE) # RESTRICT  deleted >>  dont delete the item or ( default="Default", on_delete=models.SET_DEFAULT)
     products = models.ManyToManyField(Product, related_name="sale_orders")
 
@@ -207,30 +206,40 @@ class Sale_order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     # products
 
-# this is to sale a product
-def add_product_to_sale(product_name, product_id, quantity , employee_id ):
+#---------------------Sale--------------------
+def create_sale_order(employee_id):
     employee = Employee.objects.get(id=employee_id)
-    sale_order = Sale_order.objects.create(product_name=product_name, quantity=quantity, employee = employee)
+    return Sale_order.objects.create(employee = employee) # create the invoice
+
+def add_sale_relation(product_id):#------------------------ add the product to the invoice
+    product = Product.objects.get(id=product_id)
+    sale_order = Sale_order.objects.last()
+    return sale_order.products.add(product)
+
+# this is to sale a product
+def add_product_to_sale( product_id, quantity ): #--------- minimize the quantity of the product
     product = Product.objects.get(id=product_id)
     product.quantity -= int(quantity)
     return product.save()
+#--------------------Sale------------------------
 
-# this is to purchase a product
-def add_product_to_purchase(product_name, product_id, quantity, employee_id):
+
+
+#--------------------purchase--------------------
+def create_purchase_order(employee_id):
     employee = Employee.objects.get(id=employee_id)
-    purchase_invoice = Purchasing_invoice.objects.create(product_name=product_name, quantity=quantity, employee = employee)
+    return Purchasing_invoice.objects.create(employee = employee) # craete the invoice
+
+def add_purchase_relation(product_id): #--------------------------- add the product to the invoice
+    product = Product.objects.get(id=product_id)
+    purchase_invoice = Purchasing_invoice.objects.last()
+    return purchase_invoice.products.add(product)
+
+def add_product_to_purchase(product_id, quantity): #--------------- maximize the quantity of the product
     product = Product.objects.get(id=product_id)
     product.quantity += int(quantity)
-    return product.save()
+    return product.save() 
+#--------------------purchase--------------------
 
-def sale_order_products(product_id):
-    product_id = product_id
-    sale_order = Sale_order.objects.last()
-    product = Product.objects.get(id=product_id)
-    return sale_order.products.add(product)
 
-def purchase_order_products(product_id):
-    product_id = product_id
-    purchase_invoice = Purchasing_invoice.objects.last()
-    product = Product.objects.get(id=product_id)
-    return purchase_invoice.products.add(product)
+# this is to purchase a product
