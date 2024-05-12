@@ -22,6 +22,11 @@ urlpatterns = [
     path('submet_purchase_order', views.submet_purchase_order),
     path('employee_reports', views.display_employee_reports),
     
+    path('view_sale_order/<int:id>', views.view_sale_order),#--------------------------------------------Mai
+    path('edit_product/<int:id>',views.display_edit_form),
+    path('update_product/<int:id>', views.update_product),
+    path('stock_manager',views.display_stock_for_manager),#--------------------------------------------Mai
+
     path('signup', views.sign_up),
 
     path('signin', views.sign_in),

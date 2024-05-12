@@ -20,6 +20,9 @@ def index(request):
     if 'manager_id' in request.session:
         context = {           
             'sixmonthesproducts': models.get_six_monthes_products(),
+            'out_stock':models.out_of_stock(),
+            'count':models.count_out_stock(),
+
             }
         return render(request , 'index.html' , context)
     else:
@@ -95,6 +98,14 @@ def logout(request):
     request.session.clear()
     return redirect('/')
 
+def display_stock_for_manager(request):
+    context={
+        'products': models.get_all_products(),
+        'today': datetime.today().date(),
+        'expiry_range': datetime.today().date() + timedelta(days=6*30),
+    }
+    return render(request, 'stock_manager.html',context)
+
 
 def add_new_employee(request):
     errors = models.Employee.objects.employee_validator(request.POST)
@@ -161,18 +172,20 @@ def add_new_product(request):
 sale_order = []
 
 def display_sales(request):
-    
     context = {
             'sale_order': sale_order,
             'products': models.get_all_products(),
+            'orders' : models.get_all_sales_orders(),
+            'employee': models.get_employee_by_id(request.session['employee_id'])
         }
     return render(request , 'sale_orders.html', context )
 
 def display_purchases(request):
     context = {
             'purchases_order': purchases_order,
-            'products': models.get_all_products(),
-            'invoices' : models.get_all_invoices()
+            'products': models.get_all_products(),#--------------------------------------------Mai
+            'invoices' : models.get_all_invoices(),
+            'employee': models.get_employee_by_id(request.session['employee_id']),#--------------------------------------------Mai
         }
     return render(request , 'purchase_invoices.html' ,context)
 
@@ -236,3 +249,28 @@ def display_employee_reports(request):
         'employee': models.get_employee_by_id(request.session['employee_id'])
     }
     return render (request, 'employee_reports.html', context)
+
+def view_sale_order(request, id):#--------------------------------------------Mai
+    context={
+        'order': models.get_sale_order(id),
+
+    }
+    return render(request, 'view_sale_order.html',context)
+
+def display_edit_form(request,id):
+    context={
+        'products': models.get_all_products(),
+        'product':models.get_product(id),
+    }
+    return render(request, 'edit_product.html',context)
+
+def update_product(request,id):
+    errors = models.Product.objects.product_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect(f'/edit_product/{id}')
+    else:
+        models.update_selected_product(request,id)
+
+    return redirect('/employye_dashboard')#--------------------------------------------Mai
