@@ -188,14 +188,17 @@ def add_product_to_sale(request):
     return redirect('/sales')
     
 def submet_sale_order(request):
+    employee_id = request.session['employee_id']
+    models.create_sale_order(employee_id) #---------CREATE the invoise------- 1
     for key in sale_order :
         product_name = key.get('product_name')
         product_id = key.get('product_id')
         quantity = key.get('quantity')
-        employee_id = request.session['employee_id']
-        models.add_product_to_sale(product_name, product_id, quantity , employee_id )
+                                                
+        models.add_sale_relation(product_id)#---------GET the product-----AMD------ADD the product------- 4
+
+        models.add_product_to_sale( product_id, quantity )
         
-    models.sale_order_products(product_id)
     sale_order.clear()
     return redirect('/sales')
 #____________________________________SALE___________________________________
@@ -210,13 +213,15 @@ def add_product_to_purchase(request):
     return redirect('/purchases')
     
 def submet_purchase_order(request):
+    employee_id = request.session['employee_id']
+    models.create_purchase_order(employee_id) #---------CREATE the invoise------- 1
     for key in purchases_order :
         product_name = key.get('product_name')
         product_id = key.get('product_id')
         quantity = key.get('quantity')
-        employee_id = request.session['employee_id']
-        models.add_product_to_purchase(product_name, product_id, quantity , employee_id )
-        models.purchase_order_products(product_id)
+        
+        models.add_purchase_relation(product_id)#---------GET the product-----AMD------ADD the product------- 4
+        models.add_product_to_purchase(product_id, quantity)
     purchases_order.clear()
     return redirect('/purchases')
 #____________________________________PURCHASE___________________________________
