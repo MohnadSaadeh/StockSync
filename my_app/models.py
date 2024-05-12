@@ -1,9 +1,9 @@
 from django.db import models
 from django.db.models import F, ExpressionWrapper, FloatField ,DecimalField
 import re
-import datetime
-from datetime import datetime , timedelta
 
+from datetime import datetime , timedelta
+# import datetime
 from . import views
 
 
@@ -56,6 +56,7 @@ def get_manager(id):#--------------------------------------------Mai
 #--------------------------------------------------------------------EMPLOYEE-----------------------
 class EmployeeManager(models.Manager):
     def employee_validator(self, postData):
+        dob_val = views.get_date_time()
         errors = {}
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
         if len(postData['f_name']) < 2:
@@ -66,7 +67,8 @@ class EmployeeManager(models.Manager):
             errors['email'] = "Invalid email address!"
         if postData['DOB'] == "":
             errors['DOB'] = "Please enter a date"
-        if postData['DOB'] > str(datetime.date.today()):
+        
+        if postData['DOB'] > str(dob_val ):
             errors['DOB'] = "Date should be in the past"
         if len(postData['password']) < 8:
             errors['password'] = "Password should be at least 8 characters"
