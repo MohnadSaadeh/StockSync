@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import F, ExpressionWrapper, FloatField
+from django.db.models import F, ExpressionWrapper, FloatField, DecimalField
 import datetime
 import re
 from datetime import datetime , timedelta
@@ -49,6 +49,8 @@ class Manager(models.Model):
     objects = ManagerManager()
     # employees
 
+def get_manager(id):
+    return Manager.objects.get(id=id)
 
 #--------------------------------------------------------------------EMPLOYEE-----------------------
 class EmployeeManager(models.Manager):
@@ -63,8 +65,12 @@ class EmployeeManager(models.Manager):
             errors['email'] = "Invalid email address!"
         if postData['DOB'] == "":
             errors['DOB'] = "Please enter a date"
-        if postData['DOB'] > str(datetime.date.today()):
-            errors['DOB'] = "Date should be in the past"
+        today = datetime.timestamp(datetime.now()) #change date to integer
+        release_date = datetime.strptime(postData['DOB'], '%Y-%m-%d') # shange the date from string to date
+        if datetime.timestamp(release_date) >= today:
+            errors['DOB']="The date should be in the past"
+        # if postData['DOB'] > str(datetime.date.today()):
+        #     errors['DOB'] = "Date should be in the past"
         if len(postData['password']) < 8:
             errors['password'] = "Password should be at least 8 characters"
         if postData['c_password'] != postData['password']:
@@ -120,7 +126,7 @@ class ProductManager(models.Manager):
         if postData['purchasing_price'] == "":
             errors['purchasing_price'] = "Please enter a purchasing price"
         if postData['expiry_date'] == "":
-            errors['expiry_date'] = "Please enter a expiry date"
+            errors['expiry_date'] = "Please enter an expiry date"
         if postData['expiry_date'] < str(datetime.today().date()):
             errors['expiry_date'] = "Expiry date should be in the future"
         if postData['supplier'] == "":
@@ -150,6 +156,27 @@ def get_product_expired():
 def delete_clicked_product(request):
     product=Product.objects.get(id=request.POST['product_id'])
     return product.delete()
+
+def get_product(id):
+    return Product.objects.get(id=id)
+
+def update_selected_product(request,id):
+    
+    product=Product.objects.get(id=id)
+    product.product_name=request.POST['product_name']
+    product.quantity=request.POST['quantity']
+    product.purchasing_price=request.POST['purchasing_price']
+    product.expiry_date=request.POST['expiry_date']
+    product.supplier=request.POST['supplier']
+    product.employee=Employee.objects.get(id=request.session['employee_id'])
+    
+    product.save()
+
+def out_of_stock():
+    return Product.objects.filter(quantity=0)
+
+def count_out_stock():
+    return Product.objects.filter(quantity=0).count()
 
 
 #--------------- not used -------------------

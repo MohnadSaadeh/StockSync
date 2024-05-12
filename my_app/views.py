@@ -20,6 +20,9 @@ def index(request):
     if 'manager_id' in request.session:
         context = {           
             'sixmonthesproducts': models.get_six_monthes_products(),
+            'out_stock':models.out_of_stock(),
+            'count':models.count_out_stock(),
+            
             }
         return render(request , 'index.html' , context)
     else:
@@ -94,6 +97,14 @@ def sign_in(request):
 def logout(request):
     request.session.clear()
     return redirect('/')
+
+def display_stock_for_manager(request):
+    context={
+        'products': models.get_all_products(),
+        'today': datetime.today().date(),
+        'expiry_range': datetime.today().date() + timedelta(days=6*30),
+    }
+    return render(request, 'stock_manager.html',context)
 
 
 def add_new_employee(request):
@@ -212,3 +223,21 @@ def view_sale_order(request, id):
         
     }
     return render(request, 'view_sale_order.html',context)
+
+def display_edit_form(request,id):
+    context={
+        'products': models.get_all_products(),
+        'product':models.get_product(id),
+    }
+    return render(request, 'edit_product.html',context)
+
+def update_product(request,id):
+    errors = models.Product.objects.product_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect(f'/edit_product/{id}')
+    else:
+        models.update_selected_product(request,id)
+    
+    return redirect('/employye_dashboard')

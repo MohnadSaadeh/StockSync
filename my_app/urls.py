@@ -20,6 +20,9 @@ urlpatterns = [
     path('submet_sale_order', views.submet_sale_order),
     path('employee_reports', views.display_employee_reports),
     path('view_sale_order/<int:id>', views.view_sale_order),
+    path('edit_product/<int:id>',views.display_edit_form),
+    path('update_product/<int:id>', views.update_product),
+    path('stock_manager',views.display_stock_for_manager),
     
     path('signup', views.sign_up),
 
