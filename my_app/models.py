@@ -1,8 +1,9 @@
 from django.db import models
 from django.db.models import F, ExpressionWrapper, FloatField ,DecimalField
 import re
-from datetime import datetime , timedelta
 import datetime
+from datetime import datetime , timedelta
+
 from . import views
 
 

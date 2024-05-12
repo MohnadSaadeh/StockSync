@@ -6,6 +6,7 @@ from datetime import datetime , timedelta
 
 
 
+
 # to display the sign-in page
 def about_us(request):
     return render(request, 'about_us.html')
@@ -222,7 +223,7 @@ def add_product_to_purchase(request):
     product_name = request.POST['product_name']
     quantity = request.POST['quantity']
     product_id = models.Product.objects.get(product_name=product_name).id
-    purchases_order.append ( {'product_name': product_name , 'product_id': product_id , 'quantity': quantity } )
+    purchases_order.append ( {'product_name': product_name, 'product_id': product_id , 'quantity': quantity } )
     return redirect('/purchases')
     
 def submet_purchase_order(request):
