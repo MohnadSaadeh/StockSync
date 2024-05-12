@@ -3,6 +3,7 @@ from . import models
 from django.contrib import messages
 import bcrypt
 from datetime import datetime , timedelta
+import datetime
 
 
 
@@ -275,3 +276,7 @@ def update_product(request,id):
         models.update_selected_product(request,id)
 
     return redirect('/employye_dashboard')#--------------------------------------------Mai
+
+
+def get_date_time():
+    return datetime.date.today()# used in models line 69
