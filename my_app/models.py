@@ -1,10 +1,10 @@
 from django.db import models
 from django.db.models import F, ExpressionWrapper, FloatField ,DecimalField
-import datetime
 import re
+import datetime
 from datetime import datetime , timedelta
-from . import views
 
+from . import views
 
 
 #--------------------------------------------------------------------MANAGER-----------------------
@@ -50,7 +50,9 @@ class Manager(models.Model):
     objects = ManagerManager()
     # employees
 
-
+def get_manager(id):#--------------------------------------------Mai
+    return Manager.objects.get(id=id)
+    
 #--------------------------------------------------------------------EMPLOYEE-----------------------
 class EmployeeManager(models.Manager):
     def employee_validator(self, postData):
@@ -110,6 +112,10 @@ def get_employee_by_id(id):
     return Employee.objects.get(id=id)
 
 
+
+
+
+
 #--------------------------------------------------------------------PRODUCT-----------------------
 class ProductManager(models.Manager):
     def product_validator(self, postData):
@@ -121,7 +127,7 @@ class ProductManager(models.Manager):
         if postData['purchasing_price'] == "":
             errors['purchasing_price'] = "Please enter a purchasing price"
         if postData['expiry_date'] == "":
-            errors['expiry_date'] = "Please enter a expiry date"
+            errors['expiry_date'] = "Please enter an expiry date"
         if postData['expiry_date'] < str(datetime.today().date()):
             errors['expiry_date'] = "Expiry date should be in the future"
         if postData['supplier'] == "":
@@ -151,6 +157,27 @@ def get_product_expired():
 def delete_clicked_product(request):
     product=Product.objects.get(id=request.POST['product_id'])
     return product.delete()
+
+def get_product(id):#--------------------------------------------Mai
+    return Product.objects.get(id=id)
+
+def update_selected_product(request,id):
+
+    product=Product.objects.get(id=id)
+    product.product_name=request.POST['product_name']
+    product.quantity=request.POST['quantity']
+    product.purchasing_price=request.POST['purchasing_price']
+    product.expiry_date=request.POST['expiry_date']
+    product.supplier=request.POST['supplier']
+    product.employee=Employee.objects.get(id=request.session['employee_id'])
+
+    product.save()
+
+def out_of_stock():
+    return Product.objects.filter(quantity=0)
+
+def count_out_stock():
+    return Product.objects.filter(quantity=0).count()#--------------------------------------------Mai
 
 
 #--------------- not used -------------------
@@ -225,6 +252,8 @@ def add_product_to_sale( product_id, quantity ): #--------- minimize the quantit
 
 
 
+
+
 #--------------------purchase--------------------
 def create_purchase_order(employee_id):
     employee = Employee.objects.get(id=employee_id)
@@ -243,3 +272,8 @@ def add_product_to_purchase(product_id, quantity): #--------------- maximize the
 
 
 # this is to purchase a product
+def get_all_sales_orders():#--------------------------------------------Mai
+    return Sale_order.objects.all()
+
+def get_sale_order(id):#--------------------------------------------Mai
+    return Sale_order.objects.get(id=id)

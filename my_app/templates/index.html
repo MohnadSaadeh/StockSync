@@ -41,6 +41,9 @@
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
+  <div class="position-absolute w-100 min-height-300 top-0" style="background-image: url('static/img/profile-layout-header.jpg'); background-position-y: 50%;">
+    <span class="mask bg-primary opacity-6"></span>
+  </div>
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
     <div class="sidenav-header">
@@ -63,21 +66,15 @@
 
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="./pages/tables.html">
+          <a class="nav-link " href="/stock_manager">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Stock</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link " href="./pages/billing.html">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Reports</span>
-          </a>
-        </li>
+        
+        
         <!-- <li class="nav-item">
           <a class="nav-link " href="./pages/virtual-reality.html">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -314,7 +311,7 @@
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Out of stock products</p>
                     <h5 class="font-weight-bolder">
-                      10
+                      {{count}}
                     </h5>
                     <p class="mb-0">
                       <!-- <span class="text-danger text-sm font-weight-bolder">-2%</span>
@@ -432,6 +429,7 @@
               </div>
             </div>
             <div class="table-responsive">
+
               <table class="table align-items-center ">
                 <tr>
                   <th>Product</th>
@@ -588,61 +586,24 @@
             </div>
             <div class="card-body p-3">
               <ul class="list-group">
+                {% for product in out_stock %}
                 <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex align-items-center">
                     <!-- <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
                       <i class="ni ni-mobile-button text-white opacity-10"></i>
                     </div> -->
                     <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark text-sm">test</h6>
+                      <h6 class="mb-1 text-dark text-sm">{{product.product_name}}</h6>
                       <!-- <span class="text-xs">250 in stock, <span class="font-weight-bold">346+ sold</span></span> -->
                     </div>
                   </div>
+
                   <!-- <div class="d-flex">
                     <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
                   </div> -->
                 </li>
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex align-items-center">
-                    <!-- <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                      <i class="ni ni-tag text-white opacity-10"></i>
-                    </div> -->
-                    <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark text-sm">test</h6>
-                      <!-- <span class="text-xs">123 closed, <span class="font-weight-bold">15 open</span></span> -->
-                    </div>
-                  </div>
-                  <!-- <div class="d-flex">
-                    <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                  </div> -->
-                </li>
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex align-items-center">
-                    <!-- <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                      <i class="ni ni-box-2 text-white opacity-10"></i>
-                    </div> -->
-                    <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark text-sm">test</h6>
-                      <!-- <span class="text-xs">1 is active, <span class="font-weight-bold">40 closed</span></span> -->
-                    </div>
-                  </div>
-                  <!-- <div class="d-flex">
-                    <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                  </div> -->
-                </li>
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 border-radius-lg">
-                  <div class="d-flex align-items-center">
-                    <!-- <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                      <i class="ni ni-satisfied text-white opacity-10"></i>
-                    </div> -->
-                    <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark text-sm">test</h6>
-                      <!-- <span class="text-xs font-weight-bold">+ 430</span> -->
-                    </div>
-                  </div>
-                  <!-- <div class="d-flex">
-                    <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                  </div> -->
+                {% endfor %}
+                
                 </li>
               </ul>
             </div>
