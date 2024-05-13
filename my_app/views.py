@@ -103,8 +103,8 @@ def logout(request):
 def display_stock_for_manager(request):
     context={
         'products': models.get_all_products(),
-        'today': datetime.today().date(),
-        'expiry_range': datetime.today().date() + timedelta(days=6*30),
+        'today': get_date_time(),
+        'expiry_range': get_date_time() + timedelta(days=6*30),
     }
     return render(request, 'stock_manager.html',context)
 
@@ -234,7 +234,6 @@ def submet_purchase_order(request):
         product_name = key.get('product_name')
         product_id = key.get('product_id')
         quantity = key.get('quantity')
-        
         models.add_purchase_relation(product_id)#---------GET the product-----AMD------ADD the product------- 4
         models.add_product_to_purchase(product_id, quantity)
     purchases_order.clear()
@@ -246,8 +245,8 @@ def submet_purchase_order(request):
 def display_employee_reports(request):
     context = {
         'products': models.get_all_products(),
-        'today': datetime.today().date(),
-        'expiry_range': datetime.today().date() + timedelta(days=6*30),
+        'today': get_date_time(),
+        'expiry_range': get_date_time() + timedelta(days=6*30),
         'employee': models.get_employee_by_id(request.session['employee_id'])
     }
     return render (request, 'employee_reports.html', context)
