@@ -547,7 +547,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Expiry Date</label>
-                    <input class="form-control" type="date" name="expiry_date" placeholder="{{product.expiry_date}}">
+                    <input class="form-control" type="date" name="expiry_date" value="{{product.expiry_date|date:'Y-m-d' }}">
                   </div>
                 </div>
                 <div class="col-md-6">
