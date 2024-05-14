@@ -4,6 +4,8 @@ from django.contrib import messages
 import bcrypt
 from datetime import datetime , timedelta
 import datetime
+from django.http import HttpResponse
+from django.http import JsonResponse
 
 
 
@@ -173,6 +175,8 @@ def add_new_product(request):
         return redirect('/employye_dashboard')
 sale_order = []
 
+
+
 def display_sales(request):
     context = {
             'sale_order': sale_order,
@@ -219,6 +223,8 @@ def submet_sale_order(request):
 #____________________________________SALE___________________________________
 
 purchases_order = []
+
+
 #____________________________________PURCHASE___________________________________
 def add_product_to_purchase(request):
     product_name = request.POST['product_name']
@@ -238,6 +244,7 @@ def submet_purchase_order(request):
         models.add_product_to_purchase(product_id, quantity)
     purchases_order.clear()
     return redirect('/purchases')
+
 #____________________________________PURCHASE___________________________________
 
 
@@ -276,6 +283,40 @@ def update_product(request,id):
 
     return redirect('/employye_dashboard')#--------------------------------------------Mai
 
-
+#_______________________________________________________________________________________________________
 def get_date_time():
     return datetime.date.today()# used in models line 69
+
+
+def search_results(request): # its a function to get the search value AJAX
+    if 'employee_id' not in request.session:
+        return redirect('/index')
+    else:
+        if request.is_ajax():
+            res = None
+            searchValue = request.POST.get('searchValue')
+            print(searchValue)
+            qs = models.Product.objects.filter(product_name__icontains=searchValue)
+            if len(qs) > 0 and  len(searchValue) > 0:
+                data = []
+                for pos in qs:
+                    item = {
+                        'id': pos.id,
+                        'product_name': pos.product_name,
+                        'quantity': pos.quantity,
+                        'purchasing_price': pos.purchasing_price,
+                        'expiry_date': pos.expiry_date,
+                        'supplier': pos.supplier,
+                        
+                    }
+                    data.append(item)
+                res = data
+            else:
+                res = 'No Products found ...'
+            return JsonResponse({'data': res})
+        return JsonResponse({})
+
+def clear_purchases_list():
+    return purchases_order.clear()
+def clear_sales_list():
+    return sale_order.clear()
