@@ -11,10 +11,11 @@ StockSync is a stock management system provides a robust solution for businesses
 
 ## Our Team 
   - [Mohannad Saadeh](#installation)
-  - [Mai Thaher]([#installation](https://github.com/Mai-Thaher))
+  - [Mai Thaher](https://github.com/Mai-Thaher)
   - [Akram Jaber](#installation)
 
 ## Pictures
+</br>
   # Manager Dashboard 
 ![StockSync1](https://github.com/MohnadSaadeh/StockSync/assets/155642672/ba38acba-6b8f-44aa-adfd-f7954fec5dbe)
 ![image](https://github.com/MohnadSaadeh/StockSync/assets/155642672/1e211aad-da17-4ad5-823b-a58a1999fddc)
