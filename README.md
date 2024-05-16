@@ -1,6 +1,6 @@
 # StockSync
 
-ClinicMate offers a robust appointment management system designed specifically for clinics of all sizes and specialties. Our platform enables clinics to easily schedule, reschedule, and cancel appointments, while also providing patients with convenient access to their appointment details. With features such as automated reminders, patient notifications, and real-time updates, ClinicMate ensures that clinics run smoothly and patients receive the care they need without hassle.
+StockSync is a stock management system provides a robust solution for businesses to streamline inventory tracking, procurement, and sales processes. Our system supports role-based access control ensure that only authorized personnel can access sensitive inventory data and perform specific actions.
 
 ## Technologies used
 
