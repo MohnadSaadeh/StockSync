@@ -63,7 +63,7 @@
             <!-- <span class="nav-link-text ms-1"> <b class="message_success" >{{manager.first_name}} {{manager.last_name}}</b> </span> -->
           </a>
           <li class="nav-item">
-            <a class="nav-link active" href="/index">
+            <a class="nav-link " href="/index">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
               </div>
@@ -152,10 +152,10 @@
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
+            <!-- <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
               <input type="text" class="form-control" placeholder="Type here...">
-            </div>
+            </div> -->
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
@@ -497,7 +497,7 @@
                         <p class="text-sm font-weight-bold mb-0"> {{product.quantity}} </p>
                       </td>
                       <td>
-                        <span class="text-xs font-weight-bold">{{product.purchasing_price}}</span>
+                        <span class="text-sm font-weight-bold">{{product.purchasing_price}}</span>
                       </td>
                       <td>
                         {% if product.expiry_date < expiry_range %}
@@ -520,10 +520,10 @@
                         </div> -->
                       <!-- </td> -->
                       <td>
-                        <span class="text-xs font-weight-bold">{{product.supplier}}</span>
+                        <span class="text-sm font-weight-bold">{{product.supplier}}</span>
                       </td>
                       <td>
-                        <span class="text-xs font-weight-bold">{{product.employee.first_name}} {{product.employee.last_name}}</span>
+                        <span class="text-sm font-weight-bold">{{product.employee.first_name}} {{product.employee.last_name}}</span>
                       </td>
                       <!-- <td >
                       <td class="align-middle">
@@ -704,9 +704,9 @@
     </div>
   </main>
   <div class="fixed-plugin">
-    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+    <!-- <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
-    </a>
+    </a> -->
     <div class="card shadow-lg">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">

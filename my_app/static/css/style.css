@@ -3,8 +3,9 @@
     color: red;
 }
 .message_success {
+    width: min-content;
     margin: 10px;
-    margin-left: 30%;
+    margin-left: 10%;
     padding: 10px;
     background-color: rgb(191, 236, 191);
     color: rgb(8, 24, 8);
@@ -41,21 +42,34 @@
                 opacity 200ms ease-in-out 0ms,
                 transform 20ms ease-in-out 0ms;
 }
-
-
-/* for  search results */
-.not-visible {
-    display: none;
+@media print{
+    body *{
+        visibility:hidden;
+        
+    }
+    #printableTable, #printableTable *{
+        visibility: visible;
+    }
+    #printableTable{
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    .no-print{
+        display: none;
+    }
+    #printableTable2, #printableTable2 *{
+        visibility: visible;
+    
+    }
+    #printableTable2{
+        width: 90%;
+        position: absolute;
+        left: 5%;
+        top: 20%;
+    }
+    #printableTable2 h2{
+        color: blueviolet;
+    }
+    
 }
-.results-card {
-    width: 100%;
-    box-shadow: 0 8px 8px 0 rgba(151, 150, 150, 0.25);
-    transition: 0.5s;
-    border-radius: 7px;
-    padding: 2px 2px;
-    margin: 10 auto;
-}
-.item {
-    text-decoration: none;
-}
-/* for  search results */

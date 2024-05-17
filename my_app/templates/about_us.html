@@ -65,7 +65,7 @@
             <!-- <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="../pages/dashboard.html">
               Argon Dashboard 2
             </a> -->
-            <h6>StockSync Homepage</h6>
+            <h6>About Us</h6>
             <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon mt-2">
                 <span class="navbar-toggler-bar bar1"></span>
@@ -121,74 +121,41 @@
     </div>
   </div>
   <main class="main-content  mt-0">
-    <div><img src="static/img/stocklogo.PNG" alt="logo" style="position: absolute; top: 12%; left: 16%;"></div>
+    
     <section>
-      <div class="page-header min-vh-100">
-        <div class="container">
+      <div class="page-header min-vh-100 ">
+        <div class="container ">
           <div class="row">
-            <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
-              <div class="card card-plain">
-                <div class="card-header pb-0 text-start">
-                  <h4 class="font-weight-bolder">Sign In</h4>
-                  <p class="mb-0">Enter your email and password to sign in</p>
-                </div>
-                <div class="card-body">
-                  <form action="/signin" role="form" method="post">
-                    {% csrf_token %}
-                    <select class="form-select form-select-lg mb-3" aria-label="Large select example" name="account_type">
-                      <option value="1">Employee account</option>
-                      <option value="2">Manager account</option>
-                    </select>
-                    <div class="mb-3">
-                      <input type="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email" name="email">
-                    </div>
-                    <div class="mb-3">
-                      <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" name="password">
-                    </div>
-                    <!-- <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="rememberMe" name="form_check">
-                      <label class="form-check-label" for="rememberMe">Remember me</label>
-                    </div> -->
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
-                    </div>
-                  </form>
-                  {% if messages %}
-                  <ul class="messages">    
-                      {% for message in messages %}    
-                          {% if message.extra_tags == 'admin_login' %}
-                          <li class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
-                          {% else %}
-                          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
-                          {% endif %}
-                      {% endfor %}
+            <div class="col-xl-6 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
+                <h3>About Us</h3>
+                <p>Welcome to our comprehensive stock management system <span style="color: blueviolet;"><b>StockSync</b></span>. In today's dynamic business landscape, efficient stock management is paramount for businesses of all sizes to optimize operations, minimize costs, and maximize profits. Our stock management system provides a robust solution for businesses to streamline inventory tracking, procurement, and sales processes.</p>
+                <p>The primary purpose of our stock management system is to provide businesses with a centralized platform to effectively manage their inventory. Whether you're a small retail store or a large-scale manufacturer, our system empowers you to maintain accurate stock levels, track product movements, and make informed decisions to meet customer demand and drive business growth.</p>
+                <div>
+                  <br>
+                  <br>
+                  <h3 > <b>Our Team</b></h3>
+                  
+                  <ul>
+                    <li>Mai Thaher</li>
+                    <li>Mohannad Saadeh</li>
+                    <li>Akram Jaber</li>
                   </ul>
-                  {% else %}
-                      {% if messages.success %}
-                          <p class="message_success" >You have successfully loged as Admin!  </p>
-                      {% endif %}
-                  {% endif %}
-
                 </div>
-                <!-- <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                  <p class="mb-4 text-sm mx-auto">
-                    Don't have an account?
-                    <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign up</a>
-                  </p>
-                </div> -->
               </div>
-            </div>
             <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
               <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('static/img/hompage_background.png');
           background-size: cover;">
                 <span class="mask bg-gradient-primary opacity-6"></span>
                 <h4 class="mt-5 text-white font-weight-bolder position-relative">"The way to manage your stock, STOCKSYNC"</h4>
                 <p class="text-white position-relative">All the features you'll ever need to manage your business</p>
+                
               </div>
             </div>
           </div>
         </div>
+        
       </div>
+      
     </section>
   </main>
   <!--   Core JS Files   -->

@@ -37,6 +37,7 @@
   <nonscript><link rel="stylesheet" href="{% static 'css/argon-dashboard.css' %}"></nonscript>
   <!-- Team Style for errors from Back-End -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+  
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -69,7 +70,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/sales">
+          <a class="nav-link " href="/sales">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
@@ -514,7 +515,7 @@
       </div>
       <div class="row mt-12">
         <div class="col-8 ms-10">
-          <div class="card mb-4">
+          <div class="card mb-4" id="printableTable">
             <div class="card-header pb-0">
                 
                 <h6>StockSync / Daily Report</h6>
@@ -522,7 +523,7 @@
             </div>
             <div class="card-body px-0 pt-0 pb-2 ">
               <div class="table table-responsive p-0 ">
-                <table class="table align-items-center justify-content-center mb-0">
+                <table class="table align-items-center justify-content-center mb-0" >
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Product </th>
@@ -649,14 +650,18 @@
                           <i class="fa fa-ellipsis-v text-xs"></i>
                         </button>
                       </td>
-                    </tr>
+                    </tr>-->
                   </tbody>
                 </table>
               </div>
+              <button class="no-print btn btn-primary btn-sm ms-4" onclick="printTable()">Print</button>
             </div>
-          </div> -->
+          </div> 
+          
         </div>
+        
       </div>
+      
       <!-- <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
@@ -690,11 +695,12 @@
         </div>
       </footer> -->
     </div>
+    
   </main>
   <div class="fixed-plugin">
-    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+    <!-- <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
-    </a>
+    </a> -->
     <div class="card shadow-lg">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">
@@ -775,6 +781,9 @@
         damping: '0.5'
       }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+    function printTable(){
+      window.print()
     }
   </script>
   <!-- Github buttons -->
