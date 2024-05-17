@@ -15,7 +15,7 @@ const sendSearchData = (searchValue) => {
             'searchValue': searchValue, //game in the example
         },
         success: (response)=> { //response return as jason Respons from a view
-            // console.log(response.data) //res 
+            
             const data = response.data
             if (Array.isArray(data)) {
                 resultsBox.innerHTML = ""
@@ -26,7 +26,6 @@ const sendSearchData = (searchValue) => {
                             
                             <option>${searchValue.product_name}</option>
                             
-
                         </div>
                             <div class="btn-group btn-group-sm" role="group" > 
                                 <a class="btn btn-outline-success" href="/appointment/${searchValue.id}">view</a>
@@ -61,9 +60,6 @@ searchInput.addEventListener('keyup', e=> {
     }
     sendSearchData(e.target.value)
 })
-
-
-
 
 
 // Get the <p> tag and input field

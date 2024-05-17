@@ -37,14 +37,12 @@
   <nonscript><link rel="stylesheet" href="{% static 'css/argon-dashboard.css' %}"></nonscript>
   <!-- Team Style for errors from Back-End -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
-
-<!-- -------------Ajax------------------- -->
-<script src="{% static 'js/scripts.js' %}" defer></script>
-<link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <!-- -------------Ajax------------------- -->
+  <script src="{% static 'js/scripts.js' %}" defer></script>
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <!-- -------------Alax------------------- -->
-
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -77,7 +75,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/sales">
+          <a class="nav-link " href="/sales">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
@@ -128,7 +126,7 @@
           </a>
         </li> 
         <li class="nav-item">
-          <a class="nav-link " href="/logout">
+          <a class="nav-link " href="/emp_logout">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-collection text-info text-sm opacity-10"></i>
             </div>
@@ -171,7 +169,7 @@
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a href="/logout" class="nav-link text-white font-weight-bold px-0">
+              <a href="/emp_logout" class="nav-link text-white font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
                 <span class="d-sm-inline d-none">Logout</span>
               </a>
@@ -269,9 +267,6 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-      
-      <!-- ------------------------------------------ -->
-
       <div class="row">
         <div class="col-8">
           <div class="card mb-4">
@@ -289,41 +284,39 @@
                 <div class="row">
                   <div class="col-md-6">
                     <label for="example-text-input" class="form-control-label">Product Name</label>
-                    <div class="w-50 text-center">
-                      <div id="search-form"   outocomplete = "off">
-                          <input id="search-input" class="form-control me-2" type="search" placeholder="Search for a Product" aria-label="Search">
+                    </div>
+                    <div class="btn-group ">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                      
+                          <select id="results-box"   class="form-control" name="product_name">
+                            <option value="- Select Product -">- Select Product -</option>
+                            {% for product in products %}
+                            <option>{{product.product_name}}</option>
+                            {% endfor %}
+                            </select>
+    
+                        </div>
+                      </div>
+                      <div class="w-15 text-center">
+                        <div id="search-form"   outocomplete = "off">
+                            <input id="search-input" class="form-control me-2" type="search" placeholder="Search " aria-label="Search">
+                        </div>
                       </div>
                     </div>
+                    
 
-                    <div class="form-group">
-                      
-                      <select id="results-box"   class="form-control" name="product_name" >
-                        <option selected>- Select Product -</option>
-                        {% for product in products %}
-                        <option>{{product.product_name}}</option>
-                        {% endfor %}
-                        </select>
-
-                    </div>
+                    
                   </div>
                   <div class="col-md-4">
                     <div class="form-group">
                       <label for="example-text-input" class="form-control-label">Quantity</label>
-                      <input class="form-control" type="text" name="quantity" >
+                      <input class="form-control" type="number" name="quantity" >
                     </div>
                   </div>
-                  <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Supplier</label>
+                  
                     
-
-                    <!-- mohannad <select  class="form-control" name="product_list" id="example-text-input">
-                      <option >AL-QUDS</option>
-                      <option >AL-ETIHAD</option>
-                    </select> -->
-
-                  </div>
-                  </div>
+                  
               </form>
 
               <form action="/submet_purchase_order" method="post">
@@ -334,14 +327,14 @@
                         <th class="ps-3">Product</th>
                         <th class="ps-3">id</th>
                         <th>Quantity</th>
-                        <th>Supplier</th>
+                        
                     </tr>
                     {% for order in purchases_order %}
                     <tr>
                       <td class="ps-3"> {{order.product_name}} </td>
                       <td class="ps-3"> {{order.product_id}} </td>
                       <td>{{order.quantity}}</td>
-                      <td>Supplier</td>
+                      
                     </tr>
                     {% endfor %}
                   </table>
@@ -354,12 +347,16 @@
                   {% if messages %}
                   <ul class="messages">    
                     {% for message in messages %}    
-                        {% if message.extra_tags == 'add_product' %}
-                        
-                        <li class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                        {% if message.extra_tags == 'add_invoice' %}
+                        <p class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>    
                         {% else %}
                         <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> 
                         {% endif %}
+
+                        
+
+
+
                       {% endfor %}
                   </ul>
                   {% endif %}
@@ -368,7 +365,6 @@
           </div>
         </div> 
       </div>
-      <!-- ------------------------------------------ -->
       <div class="row">
         <div class="col-12">
           <div class="card mb-4">
@@ -390,22 +386,22 @@
                     </tr>
                   </thead>
                   <tbody>
-                    
+                    {% for invoice in invoices %}
                     <tr>
                       <td>
-                        <p class="text-sm mb-0 font-weight-bold mb-0"> test </p>
+                        <p class="text-sm mb-0 font-weight-bold mb-0"> {{invoice.id}} </p>
                       </td>
                       <td>
-                        <p class="text-sm mb-0 font-weight-bold mb-0"> test </p>
+                        <p class="text-sm mb-0 font-weight-bold mb-0"> {{invoice.employee.first_name}} {{invoice.employee.last_name}} </p>
                       </td>
                       <td>
-                        <span class="text-sm mb-0 font-weight-bold">test</span>
+                        <span class="text-sm mb-0 font-weight-bold">{{invoice.created_at}}</span>
                       </td>
                       <td>
-                        <span class="text-sm  mb-0 font-weight-bold"><a href="">View</a></span>
+                        <span class="text-sm  mb-0 font-weight-bold"><a href="/view_purchase_invoice/{{invoice.id}}">View</a></span>
                       </td>
                     </tr>
-                    
+                    {% endfor %}
                     <!-- <tr>
                       <td>
                         <div class="d-flex px-2">
@@ -518,9 +514,9 @@
     </div>
   </main>
   <div class="fixed-plugin">
-    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+    <!-- <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
-    </a>
+    </a> -->
     <div class="card shadow-lg">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">

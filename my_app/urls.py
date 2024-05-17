@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.display_homepage),
     path('index', views.index),#dachboard
     path('logout', views.logout),
+    path('emp_logout' , views.emp_logout ),
     path('employees', views.display_employees),
     path('add_employee', views.add_new_employee),
     path('employye_dashboard', views.display_employee_dashboard),
@@ -32,10 +33,14 @@ urlpatterns = [
     path('signin', views.sign_in),
 
     path('about_us', views.about_us),
-
-#------------------------------
     path('search', views.search_results , name='search'),# ajax
     path('clear_sales_list', views.clear_sales_list),
     path('clear_purchases_list', views.clear_purchases_list),
+
+    path('view_purchase_invoice/<int:id>', views.view_purchase_invoice),
+
+
+    path('get_active_users/', views.get_active_users, name='get_active_users')
+
 
 ]

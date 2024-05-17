@@ -37,7 +37,7 @@
   <nonscript><link rel="stylesheet" href="{% static 'css/argon-dashboard.css' %}"></nonscript>
   <!-- Team Style for errors from Back-End -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
-<!-- -------------Ajax------------------- -->
+  <!-- -------------Ajax------------------- -->
   <script src="{% static 'js/scripts.js' %}" defer></script>
   <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -75,7 +75,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/sales">
+          <a class="nav-link " href="/sales">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
@@ -126,7 +126,7 @@
           </a>
         </li> 
         <li class="nav-item">
-          <a class="nav-link " href="/logout">
+          <a class="nav-link " href="/emp_logout">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-collection text-info text-sm opacity-10"></i>
             </div>
@@ -169,7 +169,7 @@
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a href="/logout" class="nav-link text-white font-weight-bold px-0">
+              <a href="/emp_logout" class="nav-link text-white font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
                 <span class="d-sm-inline d-none">Logout</span>
               </a>
@@ -267,50 +267,55 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-  <!-- ----------------------- -->
       <div class="row">
         <div class="col-8">
           <div class="card mb-4">
             <div class="card-header pb-0">
                 
               <form action="/add_order_to_sale" method="post" id="add-form">
-                  {% csrf_token %}
-                  <div class="d-flex align-items-center">
-                    <p class="mb-0 ">New Sale Order</p>
-                    
-                    <button type="submit" class="btn btn-primary btn-sm ms-auto">Add product</button>
+                    {% csrf_token %}
+                    <div class="d-flex align-items-center">
+                      <p class="mb-0 ">New Sale Order</p>
+                      
+                      <button type="submit" class="btn btn-primary btn-sm ms-auto">Add product</button>
+                    </div>
                   </div>
-                </div>
-                <div class="card-body">
-                  <p class="text-uppercase text-sm"></p>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <label for="example-text-input" class="form-control-label">Product Name</label>
-
-                      <div class="w-50 text-center">
-                        <div id="search-form"   outocomplete = "off">
-                            <input id="search-input" class="form-control me-2" type="search" placeholder="Search for a Product" aria-label="Search">
+                  <div class="card-body">
+                    <p class="text-uppercase text-sm"></p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <label for="example-text-input" class="form-control-label">Product Name</label>
+                        
+                        </div>
+                        <div class="btn-group ">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                            
+                              <select id="results-box"   class="form-control" name="product_name">
+                                <option value="-Select Product-" >- Select Product -</option>
+                                {% for product in products %}
+                                <option>{{product.product_name}}</option>
+                                {% endfor %}
+                                </select>
+                              
+                            </div>
+                          </div>
+                          
+                          <div class="w-15 text-center ">
+                            <div id="search-form"   outocomplete = "off">
+                                <input id="search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            </div>
+                          </div>
+                          
+                          
+                        </div>
+                        
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label for="example-text-input" class="form-control-label">Quantity</label>
+                          <input class="form-control" type="text" name="quantity" >
                         </div>
                       </div>
-
-                      <div class="form-group">
-                        
-                        <select id="results-box"   class="form-control" name="product_name" >
-                          <option  selected>- Select Product -</option>
-                          {% for product in products %}
-                          <option>{{product.product_name}}</option>
-                          {% endfor %}
-                        </select>
-                        
-                      </div>
-                      
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="example-text-input" class="form-control-label">Quantity</label>
-                        <input class="form-control" type="text" name="quantity" >
-                      </div>
-                    </div>
                 </form>
 
                 <form action="/submet_sale_order" method="post">
@@ -341,9 +346,9 @@
                 {% if messages %}
                 <ul class="messages">    
                   {% for message in messages %}    
-                      {% if message.extra_tags == 'add_product' %}
+                      {% if message.extra_tags == 'sold_product' %}
                       
-                      <li class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                      <p class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>    
                       {% else %}
                       <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> 
                       {% endif %}
@@ -355,17 +360,11 @@
           </div>
         </div> 
       </div>
-    <!-- ---------------------------------- -->
       <div class="row">
         <div class="col-12">
           <div class="card mb-4">
             <div class="card-header pb-0">
               <h6>Recent Sales Orders</h6>
-
-              
-
-
-
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
@@ -388,7 +387,7 @@
                         <p class="text-sm mb-0 font-weight-bold mb-0"> {{order.id}} </p>
                       </td>
                       <td>
-                        <p class="text-sm mb-0 font-weight-bold mb-0"> {{order.employee.first_name}}</p>
+                        <p class="text-sm mb-0 font-weight-bold mb-0"> {{order.employee.first_name}} {{order.employee.last_name}}</p>
                       </td>
                       <td>
                         <span class="text-sm mb-0 font-weight-bold">{{order.created_at}}</span>
@@ -510,9 +509,9 @@
     </div>
   </main>
   <div class="fixed-plugin">
-    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+    <!-- <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
-    </a>
+    </a> -->
     <div class="card shadow-lg">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">

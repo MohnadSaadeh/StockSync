@@ -1,9 +1,9 @@
 from django.db import models
-from django.db.models import F, ExpressionWrapper, FloatField ,DecimalField
+from django.db.models import F, ExpressionWrapper, FloatField ,DecimalField, IntegerField
 import re
 
 from datetime import datetime , timedelta
-# import datetime
+import datetime
 from . import views
 
 
@@ -68,7 +68,7 @@ class EmployeeManager(models.Manager):
         if postData['DOB'] == "":
             errors['DOB'] = "Please enter a date"
         
-        if postData['DOB'] > str(dob_val ):
+        if postData['DOB'] > str(dob_val):
             errors['DOB'] = "Date should be in the past"
         if len(postData['password']) < 8:
             errors['password'] = "Password should be at least 8 characters"
@@ -95,8 +95,8 @@ class Employee(models.Model):
     DOB = models.DateField()
     password = models.CharField(max_length=255)
     confirm_password = models.CharField(max_length=255)
-
     manager = models.ForeignKey(Manager , related_name="employees", on_delete=models.CASCADE) 
+    is_active = models.BooleanField(default=False) 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = EmployeeManager()
@@ -126,11 +126,15 @@ class ProductManager(models.Manager):
             errors['product_name'] = "Product name should be at least 2 characters"
         if postData['quantity'] == "":
             errors['quantity'] = "Please enter a quantity"
+        # if postData['quantity'] < 0:
+        #     errors['quantity'] = "Insufficient stock"
         if postData['purchasing_price'] == "":
             errors['purchasing_price'] = "Please enter a purchasing price"
+        if postData['product_name'] == "":
+            errors['product_name'] = "Please enter a product name"
         if postData['expiry_date'] == "":
             errors['expiry_date'] = "Please enter an expiry date"
-        if postData['expiry_date'] < str(datetime.today().date()):
+        if postData['expiry_date'] < str(datetime.date.today()):
             errors['expiry_date'] = "Expiry date should be in the future"
         if postData['supplier'] == "":
             errors['supplier'] = "Please enter a supplier"
@@ -184,7 +188,7 @@ def count_out_stock():
 
 #--------------- not used -------------------
 def get_six_monthes():
-    today = datetime.today().date()
+    today = datetime.date.today()
     six_months_later = today + timedelta(days=6*30)  # Assuming 30 days per month
     return Product.objects.filter(expiry_date__range=[today, six_months_later]).order_by('expiry_date')
 #--------------- not used -------------------
@@ -198,7 +202,7 @@ def add_product(product_name, quantity, purchasing_price, expiry_date, supplier,
 # by adding a new field called total_cost
 # with the Product.objects.annotate
 def get_six_monthes_products():
-    today = datetime.today().date()
+    today = datetime.date.today()
     six_months_later = today + timedelta(days=6*30)
     products_with_total_cost = Product.objects.annotate(
         total_cost=F('purchasing_price') * F('quantity')
@@ -208,7 +212,19 @@ def get_six_monthes_products():
 
 
 
+
 #--------------------------------------------------------------------PUECHASING-----------------------
+class Purchasing_invoiceManager(models.Manager):
+    def invoice_validator(self, postData):
+        errors = {}
+        if (postData['product_name']) == "- Select Product -":
+            errors['product_name'] = "Choose a Product Please"
+        if (postData['quantity'] == "") or (postData['quantity'] == "0" ):
+            errors['quantity'] = "Please enter a quantity"
+        # if postData['supplier'] == "":
+        #     errors['supplier'] = "Please enter a supplier"
+        return errors
+
 class Purchasing_invoice(models.Model):
 
     # product_name = models.CharField(max_length=255)
@@ -218,40 +234,82 @@ class Purchasing_invoice(models.Model):
     products = models.ManyToManyField(Product, related_name="purchasing_invoices")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    objects = Purchasing_invoiceManager()
     # products
-def get_all_invoices():
-    return Purchasing_invoice.objects.all()
+    # purchase_items
 
-#--------------------------------------------------------------------SALE_ORDER-----------------------
-class Sale_order(models.Model):
-
-    # product_name = models.CharField(max_length=255) 
-    # quantity = models.IntegerField()
-
-    employee = models.ForeignKey(Employee , related_name="sale_orders", on_delete=models.CASCADE) # RESTRICT  deleted >>  dont delete the item or ( default="Default", on_delete=models.SET_DEFAULT)
-    products = models.ManyToManyField(Product, related_name="sale_orders")
-
+class Purchase_item(models.Model):
+    purchasing_invoice = models.ForeignKey(Purchasing_invoice, related_name="purchase_items", on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name="purchase_items", on_delete=models.CASCADE)
+    quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # products
+    
+def get_all_invoices():
+    return Purchasing_invoice.objects.all().order_by('-created_at')
 
+#--------------------------------------------------------------------SALE_ORDER-----------------------
+class Sale_orderManager(models.Manager):
+    def invoice_sale_validator(self, postData):
+        errors = {}
+
+        if (postData['product_name']) == "-Select Product-":
+            errors['product_name'] = "Choose a Product Please"
+        else:
+            if Product.objects.get(product_name=postData['product_name']).quantity < int(postData['quantity']):
+                errors['quantity'] = "Insufficient stock"
+        if (postData['quantity'] == "") or (postData['quantity'] == "0" ):
+            errors['quantity'] = "Please enter a quantity"
+        else:
+            if Product.objects.get(product_name=postData['product_name']).quantity == 0:
+                errors['quantity'] = "Out of Stock"
+        # if postData['customer'] == "":
+        #     errors['supplier'] = "Please enter a supplier"
+        return errors
+
+class Sale_order(models.Model):
+    # customer_name = models.CharField(max_length=255) 
+    employee = models.ForeignKey(Employee , related_name="sale_orders", on_delete=models.CASCADE) # RESTRICT  deleted >>  dont delete the item or ( default="Default", on_delete=models.SET_DEFAULT)
+    products = models.ManyToManyField(Product, related_name="sale_orders")
+    # quantity = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = Sale_orderManager()
+    # products
+    # sale_items
+class Sale_item(models.Model):
+    sale_order = models.ForeignKey(Sale_order, related_name="sale_items", on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name="sale_items", on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 #---------------------Sale--------------------
 def create_sale_order(employee_id):
     employee = Employee.objects.get(id=employee_id)
-    return Sale_order.objects.create(employee = employee) # create the invoice
+    return Sale_order.objects.create(employee = employee ) # create the invoice
 
 def add_sale_relation(product_id):#------------------------ add the product to the invoice
     product = Product.objects.get(id=product_id)
     sale_order = Sale_order.objects.last()
     return sale_order.products.add(product)
-
+    ################################
+def add_item_to_invoice(product_id, quantity):# add the product to the invoice
+    product = Product.objects.get(id=product_id)
+    sale_order = Sale_order.objects.last()
+    return Sale_item.objects.create(sale_order=sale_order, product=product, quantity=quantity)
+    #################################
 # this is to sale a product
 def add_product_to_sale( product_id, quantity ): #--------- minimize the quantity of the product
     product = Product.objects.get(id=product_id)
     product.quantity -= int(quantity)
     return product.save()
-#--------------------Sale------------------------
 
+def today_sale_orders():#MAI******
+    return Sale_order.objects.filter(created_at__contains=datetime.date.today()).count()
+def today_purchases():#MAI******
+    return Purchasing_invoice.objects.filter(created_at__contains=datetime.date.today()).count()
+
+#--------------------Sale------------------------
 
 
 
@@ -265,7 +323,12 @@ def add_purchase_relation(product_id): #--------------------------- add the prod
     product = Product.objects.get(id=product_id)
     purchase_invoice = Purchasing_invoice.objects.last()
     return purchase_invoice.products.add(product)
-
+#################################
+def add_item_to_purchase_invoice(product_id, quantity): # add the product to the invoice
+    product = Product.objects.get(id=product_id)
+    purchase_invoice = Purchasing_invoice.objects.last()
+    return Purchase_item.objects.create(purchasing_invoice=purchase_invoice, product=product, quantity=quantity)
+#################################
 def add_product_to_purchase(product_id, quantity): #--------------- maximize the quantity of the product
     product = Product.objects.get(id=product_id)
     product.quantity += int(quantity)
@@ -275,7 +338,22 @@ def add_product_to_purchase(product_id, quantity): #--------------- maximize the
 
 # this is to purchase a product
 def get_all_sales_orders():#--------------------------------------------Mai
-    return Sale_order.objects.all()
+    return Sale_order.objects.all().order_by('-created_at')
 
 def get_sale_order(id):#--------------------------------------------Mai
     return Sale_order.objects.get(id=id)
+###############################
+def sale_orders_products(id):
+    sale_order= Sale_order.objects.get(id=id)
+    return sale_order.sale_items.all()
+###############################
+
+
+def get_purchase_invoice(id):
+    return Purchasing_invoice.objects.get(id=id)
+
+###############################
+def purchase_invoices_products(id):
+    purchase_invoice= Purchasing_invoice.objects.get(id=id)
+    return purchase_invoice.purchase_items.all()
+###############################
