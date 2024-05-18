@@ -198,7 +198,8 @@ def add_new_product(request):
         models.add_product(product_name, quantity, purchasing_price, expiry_date, supplier, employee)
         messages.success(request, "Successfully added a product!", extra_tags = 'add_product')
         return redirect('/employye_dashboard')
-sale_order = []
+
+
 
 def display_sales(request):
     context = {
@@ -221,6 +222,9 @@ def display_purchases(request):
 def delete_product(request):
     models.delete_clicked_product(request)
     return redirect('/employye_dashboard')
+
+
+sale_order = []
 #____________________________________SALE___________________________________
 def add_product_to_sale(request):
     errors = models.Sale_order.objects.invoice_sale_validator(request.POST)
@@ -298,7 +302,23 @@ def submet_purchase_order(request):
         return redirect('/purchases')
 #____________________________________PURCHASE___________________________________
 
+def clear_purchases_list(request):
+    if purchases_order == []:
+        messages.error(request, "already empty!")
+        return redirect('/purchases')
+    else:
+        purchases_order.clear()
+        return redirect('/purchases')
 
+    return purchases_order.clear()
+
+def clear_sales_list(request) :
+    if sale_order == []:
+        messages.error(request, "already empty!")
+        return redirect('/sales')
+    else:
+        sale_order.clear()
+        return redirect('/sales')
 
 def display_employee_reports(request):
     context = {
@@ -378,10 +398,7 @@ def search_results(request): # its a function to get the search value AJAX
             return JsonResponse({'data': res})
         return JsonResponse({})
 
-def clear_purchases_list():
-    return purchases_order.clear()
-def clear_sales_list():
-    return sale_order.clear()
+
 
 
 
