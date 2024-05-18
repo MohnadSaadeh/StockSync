@@ -273,50 +273,52 @@
             <div class="card-header pb-0">
                 
               <form action="/add_order_to_sale" method="post" id="add-form">
-                    {% csrf_token %}
-                    <div class="d-flex align-items-center">
-                      <p class="mb-0 ">New Sale Order</p>
-                      
-                      <button type="submit" class="btn btn-primary btn-sm ms-auto">Add product</button>
+                {% csrf_token %}
+                <div class="d-flex align-items-center">
+                  <p class="mb-0 ">New Sale Invoice</p>
+                  
+                  <button class="btn btn-primary btn-sm ms-auto">Add product</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <p class="text-uppercase text-sm"></p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="example-text-input" class="form-control-label">Product Name</label>
                     </div>
-                  </div>
-                  <div class="card-body">
-                    <p class="text-uppercase text-sm"></p>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <label for="example-text-input" class="form-control-label">Product Name</label>
-                        
-                        </div>
-                        <div class="btn-group ">
-                          <div class="col-md-3">
-                            <div class="form-group">
-                            
-                              <select id="results-box"   class="form-control" name="product_name">
-                                <option value="-Select Product-" >- Select Product -</option>
-                                {% for product in products %}
-                                <option>{{product.product_name}}</option>
-                                {% endfor %}
-                                </select>
-                              
-                            </div>
-                          </div>
-                          
-                          <div class="w-15 text-center ">
-                            <div id="search-form"   outocomplete = "off">
-                                <input id="search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            </div>
-                          </div>
-                          
-                          
-                        </div>
-                        
-                      <div class="col-md-5">
+                    <div class="btn-group ">
+                      <div class="col-md-4">
                         <div class="form-group">
-                          <label for="example-text-input" class="form-control-label">Quantity</label>
-                          <input class="form-control" type="text" name="quantity" >
+                      
+                          <select id="results-box"   class="form-control" name="product_name">
+                            <option value="- Select Product -">- Select Product -</option>
+                            {% for product in products %}
+                            <option>{{product.product_name}}</option>
+                            {% endfor %}
+                            </select>
+    
                         </div>
                       </div>
-                </form>
+                      <div class="w-15 text-center">
+                        <div id="search-form"   outocomplete = "off">
+                            <input id="search-input" class="form-control me-2" type="search" placeholder="Search " aria-label="Search">
+                        </div>
+                      </div>
+                    </div>
+                    
+
+                    
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Quantity</label>
+                      <input class="form-control" type="number" name="quantity" >
+                    </div>
+                  </div>
+                  
+                    
+                  
+              </form>
 
                 <form action="/submet_sale_order" method="post">
                   {% csrf_token %}
@@ -339,7 +341,7 @@
                   </table>
                   
                 <button type="submit" class="btn btn-primary btn-sm ms-auto mt-4">Submit order</button>
-                <a href="/clear_sales_list"><button class="btn btn-primary btn-sm ms-auto mt-4">Clear order</button></a>
+                <a href="/clear_sales_list" class="btn btn-primary btn-sm ms-auto mt-4">Clear order</a>
 
                 </div>
                 
@@ -347,10 +349,9 @@
                 <ul class="messages">    
                   {% for message in messages %}    
                       {% if message.extra_tags == 'sold_product' %}
-                      
                       <p class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>    
                       {% else %}
-                      <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> 
+                      <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p> 
                       {% endif %}
                     {% endfor %}
                 </ul>

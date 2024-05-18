@@ -252,19 +252,21 @@ def get_all_invoices():
 class Sale_orderManager(models.Manager):
     def invoice_sale_validator(self, postData):
         errors = {}
-
-        if (postData['product_name']) == "-Select Product-":
+        if postData['product_name'] == "- Select Product -":
             errors['product_name'] = "Choose a Product Please"
+            return errors
         else:
-            if Product.objects.get(product_name=postData['product_name']).quantity < int(postData['quantity']):
-                errors['quantity'] = "Insufficient stock"
-        if (postData['quantity'] == "") or (postData['quantity'] == "0" ):
-            errors['quantity'] = "Please enter a quantity"
-        else:
-            if Product.objects.get(product_name=postData['product_name']).quantity == 0:
-                errors['quantity'] = "Out of Stock"
-        # if postData['customer'] == "":
-        #     errors['supplier'] = "Please enter a supplier"
+            if (postData['quantity'] == "") or (postData['quantity'] == "0" ):
+                errors['quantity'] = "Please enter a quantity"
+                return errors
+            else:
+                if Product.objects.get(product_name=postData['product_name']).quantity < int(postData['quantity']):
+                    errors['quantity'] = "Insufficient stock"
+                    return errors
+                else:
+                    if (Product.objects.get(product_name=postData['product_name']).quantity == 0) :
+                        errors['quantity'] = "Out of Stock"
+                        return errors
         return errors
 
 class Sale_order(models.Model):
