@@ -1,5 +1,4 @@
-# StockSync 
-54.204.67.50/
+# StockSync (http://54.204.67.50/)
 
 StockSync is a stock management system provides a robust solution for businesses to streamline inventory tracking, procurement, and sales processes. Our system supports role-based access control ensure that only authorized personnel can access sensitive inventory data and perform specific actions.
 
